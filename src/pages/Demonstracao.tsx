@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { PerfilContext } from '../context/PerfilContext'
 import { Link, Route, Routes } from 'react-router-dom'
 import { Pagina } from '../components/Interface/Interface'
 import { necessidadesIniciais, ofertasIniciais, organizacoesIniciais, pedidosIniciais } from '../services/dadosDemonstracao'
@@ -20,5 +21,5 @@ export function Demonstracao() {
   const [perfil, setPerfil] = useState(0)
   const atual = orgs.find(o => o.id === perfil && o.ativa)
   const estado = { orgs, setOrgs, ofertas, setOfertas, pedidos, setPedidos, necessidades, setNecessidades, atual, setPerfil }
-  return <Routes><Route path="/" element={<Home/>}/><Route path="/acesso" element={<Acesso {...estado}/>} /><Route path="/cadastro" element={<Cadastro {...estado}/>} /><Route path="/ofertas" element={<ListaOfertas {...estado}/>} /><Route path="/ofertas/:id" element={<DetalheOferta {...estado}/>} /><Route path="/necessidades" element={<ListaNecessidades {...estado}/>} /><Route path="/necessidades/:id" element={<DetalheNecessidade {...estado}/>} /><Route path="/painel" element={<Painel {...estado}/>} /><Route path="/retiradas/:id" element={<Retiradas {...estado}/>} /><Route path="*" element={<Pagina titulo="Página não encontrada"><Link to="/">Voltar ao início</Link></Pagina>}/></Routes>
+  return <PerfilContext.Provider value={atual}><Routes><Route path="/" element={<Home/>}/><Route path="/acesso" element={<Acesso {...estado}/>} /><Route path="/cadastro" element={<Cadastro {...estado}/>} /><Route path="/ofertas" element={<ListaOfertas {...estado}/>} /><Route path="/ofertas/:id" element={<DetalheOferta {...estado}/>} /><Route path="/necessidades" element={<ListaNecessidades {...estado}/>} /><Route path="/necessidades/:id" element={<DetalheNecessidade {...estado}/>} /><Route path="/painel" element={<Painel {...estado}/>} /><Route path="/retiradas/:id" element={<Retiradas {...estado}/>} /><Route path="*" element={<Pagina titulo="Página não encontrada"><Link to="/">Voltar ao início</Link></Pagina>}/></Routes></PerfilContext.Provider>
 }

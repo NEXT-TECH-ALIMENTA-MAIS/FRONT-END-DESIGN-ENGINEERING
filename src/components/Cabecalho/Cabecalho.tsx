@@ -1,20 +1,66 @@
-import { HeartHandshake, Menu, Search, X } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { HeartHandshake, Menu, Search, UserRound, X } from 'lucide-react'
+import { useContext, useState, type FormEvent } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { PerfilContext } from '../../context/PerfilContext'
 
-type Props = { onSearch: (value: string) => void }
-export function Cabecalho({ onSearch }: Props) {
+const paginas = [
+  { nome: 'Início', caminho: '/' },
+  { nome: 'Ofertas', caminho: '/ofertas' },
+  { nome: 'Necessidades', caminho: '/necessidades' },
+]
+const institucionais = ['Sobre', 'Integrantes', 'FAQ', 'Contato']
+
+export function Cabecalho() {
+  const perfil = useContext(PerfilContext)
   const [menuAberto, setMenuAberto] = useState(false)
   const [busca, setBusca] = useState('')
-  function pesquisar(evento: FormEvent) { evento.preventDefault(); onSearch(busca); document.getElementById('ofertas')?.scrollIntoView({ behavior: 'smooth' }) }
+  const navegar = useNavigate()
+
+  function pesquisar(evento: FormEvent) {
+    evento.preventDefault()
+    const termo = busca.trim()
+    navegar(termo ? `/ofertas?busca=${encodeURIComponent(termo)}` : '/ofertas')
+    setMenuAberto(false)
+  }
+
   return <header className="bg-navy text-white">
-    <div className="border-b border-white/10 bg-[#0b2353] text-center text-[11px] font-medium tracking-wide text-blue-100"><div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-2 sm:justify-between"><span>Uma rede de solidariedade, perto de você.</span><span className="hidden sm:block">Juntos contra o desperdício de alimentos ✦</span></div></div>
-    <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-4 py-5 sm:px-6 lg:gap-9 lg:px-8">
-      <Link to="/" className="flex shrink-0 items-center gap-2" aria-label="Alimenta mais, início"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-sun text-navy"><HeartHandshake size={24} strokeWidth={2.3}/></span><span className="font-display text-2xl font-extrabold tracking-tight">alimenta<span className="text-sun">+</span></span></Link>
-      <form onSubmit={pesquisar} className="order-3 flex h-11 w-full overflow-hidden rounded-lg bg-white lg:order-none lg:max-w-xl lg:flex-1"><label htmlFor="busca" className="sr-only">Buscar alimentos ou localidades</label><input id="busca" value={busca} onChange={e=>setBusca(e.target.value)} className="min-w-0 flex-1 px-4 text-sm text-slate-800 outline-none placeholder:text-slate-400" placeholder="Busque alimentos, estabelecimentos ou cidades"/><button aria-label="Buscar" className="flex w-13 items-center justify-center bg-sun text-navy hover:bg-yellow-300"><Search size={20}/></button></form>
-      <div className="ml-auto hidden items-center gap-5 text-sm font-semibold lg:flex"><a href="#como-funciona" className="hover:text-sun">Como funciona</a><Link to="/acesso" className="rounded-lg border border-white/35 px-4 py-2.5 hover:bg-white/10">Entrar na demonstração</Link></div>
-      <button onClick={()=>setMenuAberto(!menuAberto)} aria-label={menuAberto?'Fechar menu':'Abrir menu'} aria-expanded={menuAberto} className="ml-auto rounded-lg p-2 hover:bg-white/10 lg:hidden">{menuAberto?<X/>:<Menu/>}</button>
+    <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-4 sm:gap-5 sm:px-6 lg:px-8">
+      <Link to="/" className="flex shrink-0 items-center gap-1.5 sm:gap-2" aria-label="Alimenta mais, início">
+        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-sun text-navy sm:h-10 sm:w-10"><HeartHandshake size={22} strokeWidth={2.3}/></span>
+        <span className="font-display text-base font-extrabold tracking-tight sm:text-2xl">alimenta<span className="text-sun">+</span></span>
+      </Link>
+      <form onSubmit={pesquisar} role="search" className="flex h-11 min-w-0 flex-1 overflow-hidden rounded-lg bg-white lg:max-w-2xl">
+        <label htmlFor="busca-cabecalho" className="sr-only">Buscar alimentos ou localidades</label>
+        <input id="busca-cabecalho" value={busca} onChange={e=>setBusca(e.target.value)} className="min-w-0 flex-1 px-4 text-sm text-slate-800 outline-none placeholder:text-slate-400" placeholder="Busque alimentos ou localização"/>
+        <button type="submit" aria-label="Buscar ofertas" className="flex w-13 shrink-0 items-center justify-center bg-sun text-navy hover:bg-yellow-300"><Search size={20}/></button>
+      </form>
+      <Link to={perfil?'/painel':'/acesso'} className="ml-auto flex shrink-0 items-center gap-2 rounded-lg px-2 py-1 text-sm hover:bg-white/10 sm:px-3" aria-label={perfil?`Olá, ${perfil.nome}. Acessar demonstração`:'Entrar na demonstração'}>
+        <UserRound size={22}/>
+        {perfil?<span className="hidden max-w-48 sm:block"><span className="block truncate text-xs text-blue-100">Olá, {perfil.nome}</span><strong>Acessar demonstração</strong><span className="block text-xs text-blue-200">Perfil fictício</span></span>:<strong>Entrar</strong>}
+      </Link>
     </div>
-    <nav aria-label="Navegação principal" className={`${menuAberto?'block':'hidden'} border-t border-white/10 lg:block`}><div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-2 text-sm font-medium sm:px-6 lg:flex-row lg:items-center lg:gap-8 lg:px-8 lg:py-0"><Link onClick={()=>setMenuAberto(false)} className="py-3 text-sun" to="/">Início</Link><a onClick={()=>setMenuAberto(false)} href="#ofertas" className="py-3 hover:text-sun">Explorar alimentos</a><a onClick={()=>setMenuAberto(false)} href="#como-funciona" className="py-3 hover:text-sun">Como funciona</a><Link onClick={()=>setMenuAberto(false)} to="/ofertas" className="py-3 hover:text-sun">Ofertas reais da demonstração</Link><Link onClick={()=>setMenuAberto(false)} to="/necessidades" className="py-3 hover:text-sun">Necessidades</Link><Link onClick={()=>setMenuAberto(false)} to="/acesso" className="py-3 hover:text-sun lg:hidden">Acesso demo</Link><span className="hidden flex-1 text-right text-xs text-blue-200 lg:block">Conectando quem pode doar com quem precisa receber.</span></div></nav>
+
+    <div className="border-t border-white/10 bg-[#16366f]">
+      <div className="mx-auto grid max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
+        <nav aria-label="Navegação principal" className="hidden items-center gap-5 lg:flex">
+          {paginas.map(pagina=><NavLink key={pagina.caminho} to={pagina.caminho} end={pagina.caminho==='/'} className={({isActive})=>`text-sm font-semibold hover:text-sun ${isActive?'text-sun':''}`}>{pagina.nome}</NavLink>)}
+        </nav>
+        <div className="lg:hidden"><button type="button" onClick={()=>setMenuAberto(!menuAberto)} aria-label={menuAberto?'Fechar menu':'Abrir menu'} aria-expanded={menuAberto} aria-controls="menu-mobile" className="rounded-lg p-2 hover:bg-white/10">{menuAberto?<X/>:<Menu/>}</button></div>
+        <Link to="/" className="mx-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sun text-navy" aria-label="Alimenta mais, início"><HeartHandshake size={24} strokeWidth={2.3}/></Link>
+        <nav aria-label="Páginas institucionais" className="hidden items-center justify-end gap-5 lg:flex">
+          {institucionais.map(nome=><span key={nome} aria-disabled="true" title="Página em desenvolvimento" className="text-sm font-semibold text-blue-200/75">{nome}<span className="sr-only"> (em breve)</span></span>)}
+        </nav>
+        <div className="lg:hidden" aria-hidden="true"/>
+      </div>
+    </div>
+
+    <nav id="menu-mobile" aria-label="Menu mobile" className={`${menuAberto?'block':'hidden'} border-t border-white/10 bg-[#16366f] lg:hidden`}>
+      <div className="flex flex-col gap-1 px-5 py-3 text-sm font-medium">
+        {perfil&&<p className="py-2 text-blue-100">Olá, {perfil.nome} <span className="text-xs">(perfil fictício)</span></p>}
+        {paginas.map(pagina=><NavLink key={pagina.caminho} to={pagina.caminho} end={pagina.caminho==='/'} onClick={()=>setMenuAberto(false)} className={({isActive})=>`py-2 hover:text-sun ${isActive?'text-sun':''}`}>{pagina.nome}</NavLink>)}
+        {institucionais.map(nome=><span key={nome} aria-disabled="true" className="py-2 text-blue-200/75">{nome} <span className="text-xs">(em breve)</span></span>)}
+        <Link to={perfil?'/painel':'/acesso'} onClick={()=>setMenuAberto(false)} className="py-2 text-sun">{perfil?'Acessar demonstração':'Entrar'}</Link>
+      </div>
+    </nav>
   </header>
 }
