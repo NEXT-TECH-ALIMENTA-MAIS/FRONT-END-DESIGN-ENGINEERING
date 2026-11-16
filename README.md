@@ -76,6 +76,7 @@ Além dessas páginas, a GS exige pelo menos duas páginas distintas para a solu
 - **Componentes** são partes reutilizáveis da tela, como o cabeçalho e os cartões.
 - **React Router** mostra páginas diferentes conforme o endereço; uma rota com parâmetro identifica, por exemplo, a oferta escolhida.
 - **useState** guarda dados enquanto a aplicação está aberta, como o perfil e as ofertas. A home usa **useMemo** para filtrar seus exemplos.
+- **Context e useContext** permitem que o cabeçalho leia o perfil fictício escolhido na demonstração sem precisar passar o nome por todas as páginas. Esse perfil não é um login real e é perdido ao atualizar a página.
 - **Tailwind** oferece classes de estilo no JSX, inclusive para adaptar a interface a tamanhos diferentes.
 - **TypeScript** descreve os dados, como oferta e solicitação, e ajuda a encontrar erros durante o desenvolvimento.
 - A pasta **services** separa o acesso a dados das telas. A integração com a API Java ainda precisa ser feita.
@@ -93,4 +94,4 @@ Repositório: https://github.com/NEXT-TECH-ALIMENTA-MAIS/FRONT-END-DESIGN-ENGINE
 Assim como no projeto usado em aula, cada página fica em sua própria pasta e a navegação usa React Router. Componentes reutilizados, como cabeçalho e rodapé, ficam em `src/components`, também em pastas próprias. A página `Demonstracao.tsx` reúne as rotas e os estados compartilhados do protótipo; os modelos e cálculos ficam em `src/data`. As páginas do painel ficam juntas por enquanto porque compartilham o mesmo fluxo.
 
 Exemplo: `src/pages/ListaOfertas/ListaOfertas.tsx` contém a listagem, e `src/components/CardOferta/CardOferta.tsx` contém o cartão da home. Usamos nomes iguais aos das pastas para facilitar a identificação dos arquivos.
-O `MainLayout` em `src/layouts` reúne a estrutura compartilhada das páginas e inclui o rodapé. O cabeçalho de busca permanece na home, enquanto as telas da demonstração usam navegação apropriada ao fluxo.
+O `MainLayout` em `src/layouts` reúne o cabeçalho e o rodapé compartilhados por todas as páginas. A busca do cabeçalho direciona para a lista de ofertas da demonstração. Os links institucionais serão adicionados quando as páginas estiverem prontas.
