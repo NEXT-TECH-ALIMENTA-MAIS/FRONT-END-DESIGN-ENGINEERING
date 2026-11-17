@@ -11,7 +11,7 @@ export function DetalheOfertaExemplo() {
 
   return <Pagina titulo={oferta.titulo}>
     <Link to="/ofertas" className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-bluebrand"><ArrowLeft size={16}/> Voltar às ofertas</Link>
-    <div className="mb-6 rounded-xl bg-blue-50 p-4 text-sm text-navy">Este é um exemplo fictício. Os dados apresentados não representam uma oferta disponível para retirada.</div>
+    <div className="mb-6 rounded-xl bg-blue-50 p-4 text-sm text-navy">Dados fictícios para apresentação. Esta oferta ainda não está disponível para contato ou retirada.</div>
     <div className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
       <div className="space-y-5">
         <img src={oferta.imagem} alt={oferta.titulo} className="h-56 w-full rounded-2xl object-cover sm:h-72" />
@@ -34,7 +34,7 @@ export function DetalheOfertaExemplo() {
           <h2 className="flex items-center gap-2 font-display text-xl font-bold text-navy"><Phone size={22} className="text-bluebrand"/> Contato</h2>
           <p className="mt-4 text-sm leading-6 text-slate-600">O contato não foi informado para este exemplo. Em uma oferta da demonstração, os dados aparecem após o estabelecimento publicá-la.</p>
           <p className="mt-3 text-sm text-bluebrand">As partes conversam fora da plataforma e devem atualizar o andamento no site.</p>
-          <Link to="/ofertas" className="mt-5 inline-block text-sm font-bold text-bluebrand underline">Explorar outras ofertas</Link>
+          <button type="button" disabled className="mt-5 rounded-lg bg-slate-200 px-4 py-2.5 text-sm font-bold text-slate-500" title="Contato indisponível para dados fictícios">Iniciar contato</button><p className="mt-2 text-xs text-slate-500">Disponível quando houver dados reais de contato.</p>
         </section>
       </div>
     </div>
