@@ -8,7 +8,7 @@ const paginas = [
   { nome: 'Ofertas', caminho: '/ofertas' },
   { nome: 'Necessidades', caminho: '/necessidades' },
 ]
-const institucionais = ['Sobre', 'Integrantes', 'FAQ', 'Contato']
+const institucionais = ['Sobre', 'Integrantes', 'Contato']
 
 export function Cabecalho() {
   const perfil = useContext(PerfilContext)
@@ -48,6 +48,7 @@ export function Cabecalho() {
         <div className="lg:hidden"><button type="button" onClick={()=>setMenuAberto(!menuAberto)} aria-label={menuAberto?'Fechar menu':'Abrir menu'} aria-expanded={menuAberto} aria-controls="menu-mobile" className="rounded-lg p-2 hover:bg-white/10">{menuAberto?<X/>:<Menu/>}</button></div>
         <Link to="/" className="mx-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sun text-navy" aria-label="Alimenta mais, início"><HeartHandshake size={24} strokeWidth={2.3}/></Link>
         <nav aria-label="Páginas institucionais" className="hidden items-center justify-end gap-5 lg:flex">
+          <NavLink to="/faq" className={({isActive})=>`text-sm font-semibold hover:text-sun ${isActive?'text-sun':''}`}>FAQ</NavLink>
           {institucionais.map(nome=><span key={nome} aria-disabled="true" title="Página em desenvolvimento" className="text-sm font-semibold text-blue-200/75">{nome}<span className="sr-only"> (em breve)</span></span>)}
         </nav>
         <div className="lg:hidden" aria-hidden="true"/>
@@ -58,6 +59,7 @@ export function Cabecalho() {
       <div className="flex flex-col gap-1 px-5 py-3 text-sm font-medium">
         {perfil&&<p className="py-2 text-blue-100">Olá, {perfil.nome} <span className="text-xs">(perfil fictício)</span></p>}
         {paginas.map(pagina=><NavLink key={pagina.caminho} to={pagina.caminho} end={pagina.caminho==='/'} onClick={()=>setMenuAberto(false)} className={({isActive})=>`py-2 hover:text-sun ${isActive?'text-sun':''}`}>{pagina.nome}</NavLink>)}
+        <NavLink to="/faq" onClick={()=>setMenuAberto(false)} className={({isActive})=>`py-2 hover:text-sun ${isActive?'text-sun':''}`}>FAQ</NavLink>
         {institucionais.map(nome=><span key={nome} aria-disabled="true" className="py-2 text-blue-200/75">{nome} <span className="text-xs">(em breve)</span></span>)}
         <Link to={perfil?'/painel':'/acesso'} onClick={()=>setMenuAberto(false)} className="py-2 text-sun">{perfil?'Acessar demonstração':'Entrar'}</Link>
       </div>
