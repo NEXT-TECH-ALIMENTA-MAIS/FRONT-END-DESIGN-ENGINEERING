@@ -9,6 +9,7 @@ import { Acesso } from './Acesso/Acesso'
 import { Cadastro } from './Cadastro/Cadastro'
 import { ListaOfertas } from './ListaOfertas/ListaOfertas'
 import { DetalheOferta } from './DetalheOferta/DetalheOferta'
+import { DetalheOfertaExemplo } from './DetalheOfertaExemplo/DetalheOfertaExemplo'
 import { ListaNecessidades } from './ListaNecessidades/ListaNecessidades'
 import { DetalheNecessidade } from './DetalheNecessidade/DetalheNecessidade'
 import { Painel } from './Painel/Painel'
@@ -49,8 +50,9 @@ export function Demonstracao() {
             <Link to="/">Voltar ao início</Link>
           </Pagina>
         }
-      />
+            />
     </Routes>
   </PerfilContext.Provider>
+  )
 }
 
