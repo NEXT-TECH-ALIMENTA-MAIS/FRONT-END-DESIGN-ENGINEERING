@@ -37,17 +37,24 @@ export function Sobre() {
                 </div>
 
             </section>
-            <section>
-                <h2
-                >Nossa Missão e Impacto Esperado</h2>
-                <p
-                >Nossa missão é facilitar a conexão entre estabelecimentos doadores e instituições sociais, incentivando a redistribuição responsável de alimentos e contribuindo para a redução do desperdício alimentar.</p>
-                <p
-                >Buscamos oferecer uma solução que simplifique o processo de doação, promova a transparência das operações e fortaleça a colaboração entre as organizações participantes.</p>
-                <p
-                >Com o Alimenta+, esperamos ampliar as oportunidades de aproveitamento de excedentes alimentares, apoiar instituições no atendimento de suas necessidades e incentivar práticas mais sustentáveis.</p>
-                <p
-                >A plataforma também pretende acompanhar os resultados das doações por meio de indicadores baseados nas quantidades de alimentos efetivamente recebidas e confirmadas, permitindo visualizar o impacto das ações realizadas.</p>
+            <section className="mt-10">
+                <div className="mx-auto flex max-w-7xl flex-col gap-6 overflow-hidden rounded-2xl bg-[#d1e0fa] px-6 py-8 sm:px-10 lg:px-14 lg:py-10">
+                    <h1 className="font-display text-4xl font-extrabold leading-[1.13] tracking-[-.045em] text-[#3050AD] sm:text-5xl lg:text-[3.45rem]">
+                        Nossa Missão e Impacto Esperado
+                    </h1>
+                    <p className="w-full text-justify text-base leading-8 text-[#192D63] sm:text-lg lg:text-xl">
+                        Nossa missão é facilitar a conexão entre estabelecimentos doadores e instituições sociais, incentivando a redistribuição responsável de alimentos e contribuindo para a redução do desperdício alimentar.
+                    </p>
+                    <p className="w-full text-justify text-base leading-8 text-[#192D63] sm:text-lg lg:text-xl">
+                        Buscamos oferecer uma solução que simplifique o processo de doação, promova a transparência das operações e fortaleça a colaboração entre as organizações participantes.
+                    </p>
+                    <p className="w-full text-justify text-base leading-8 text-[#192D63] sm:text-lg lg:text-xl">
+                        Com o Alimenta+, esperamos ampliar as oportunidades de aproveitamento de excedentes alimentares, apoiar instituições no atendimento de suas necessidades e incentivar práticas mais sustentáveis.
+                    </p>
+                    <p className="w-full text-justify text-base leading-8 text-[#192D63] sm:text-lg lg:text-xl">
+                        A plataforma também pretende acompanhar os resultados das doações por meio de indicadores baseados nas quantidades de alimentos efetivamente recebidas e confirmadas, permitindo visualizar o impacto das ações realizadas.
+                    </p>
+                </div>
             </section>
             <section>
                 <h2
