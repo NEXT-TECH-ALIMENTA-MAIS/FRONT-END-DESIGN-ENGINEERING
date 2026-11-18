@@ -14,6 +14,7 @@ import { DetalheNecessidade } from './DetalheNecessidade/DetalheNecessidade'
 import { Painel } from './Painel/Painel'
 import { Retiradas } from './Retiradas/Retiradas'
 import { Sobre } from './Sobre/Sobre'
+import { DetalheOfertaExemplo } from './DetalheOfertaExemplo/DetalheOfertaExemplo'
 
 export function Demonstracao() {
   const [orgs, setOrgs] = useState(organizacoesIniciais)
@@ -52,5 +53,6 @@ export function Demonstracao() {
       />
     </Routes>
   </PerfilContext.Provider>
+  )
 }
 
