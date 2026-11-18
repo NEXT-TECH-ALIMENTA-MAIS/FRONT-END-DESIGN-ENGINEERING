@@ -56,15 +56,20 @@ export function Sobre() {
                     </p>
                 </div>
             </section>
-            <section>
-                <h2
-                >Sobre o Projeto Acadêmico</h2>
-                <p
-                >O Alimenta+ é um projeto acadêmico desenvolvido no contexto da Global Solution 2026 da FIAP, dentro da temática CitizenTech, que propõe a utilização da tecnologia para enfrentar desafios da sociedade.</p>
-                <p
-                >O projeto integra conhecimentos de diferentes áreas do desenvolvimento de software, incluindo Front-End, desenvolvimento de APIs, Banco de Dados e Python.</p>
-                <p
-                >Mais do que uma atividade acadêmica, o Alimenta+ representa uma proposta de aplicação prática da tecnologia para apoiar a redistribuição de alimentos e incentivar iniciativas de impacto social e ambiental.</p>
+            <section className="mt-10 mb-10">
+                <div className="mx-auto flex max-w-7xl flex-col gap-6 overflow-hidden rounded-2xl bg-[#d1e0fa] px-6 py-8 sm:px-10 lg:px-14 lg:py-10">
+                    <h1 className="font-display text-4xl font-extrabold leading-[1.13] tracking-[-.045em] text-[#3050AD] sm:text-5xl lg:text-[3.45rem]">
+                        Sobre o Projeto Acadêmico
+                    </h1>
+                    <p className="w-full text-justify text-base leading-8 text-[#192D63] sm:text-lg lg:text-xl">
+                        O Alimenta+ é um projeto acadêmico desenvolvido no contexto da Global Solution 2026 da FIAP, dentro da temática CitizenTech, que propõe a utilização da tecnologia para enfrentar desafios da sociedade.</p>
+                    <p className="w-full text-justify text-base leading-8 text-[#192D63] sm:text-lg lg:text-xl">
+                        O projeto integra conhecimentos de diferentes áreas do desenvolvimento de software, incluindo Front-End, desenvolvimento de APIs, Banco de Dados e Python.
+                    </p>
+                    <p className="w-full text-justify text-base leading-8 text-[#192D63] sm:text-lg lg:text-xl">
+                        Mais do que uma atividade acadêmica, o Alimenta+ representa uma proposta de aplicação prática da tecnologia para apoiar a redistribuição de alimentos e incentivar iniciativas de impacto social e ambiental.
+                    </p>
+                </div>
             </section>
         </MainLayout>
     )
