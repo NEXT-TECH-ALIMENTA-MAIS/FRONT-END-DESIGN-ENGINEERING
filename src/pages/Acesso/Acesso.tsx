@@ -1,8 +1,21 @@
 
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail, Users } from 'lucide-react'
-import { Pagina, Mensagem, botao, campo, painel } from '../../components/Interface/Interface'
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  LockKeyhole,
+  Mail,
+  Users
+} from 'lucide-react'
+import {
+  Pagina,
+  Mensagem,
+  botao,
+  campo,
+  painel
+} from '../../components/Interface/Interface'
 import type { Estado } from '../../data/estado'
 
 export function Acesso({ orgs, setPerfil }: Estado) {
@@ -11,12 +24,72 @@ export function Acesso({ orgs, setPerfil }: Estado) {
   const [mostrarSenha, setMostrarSenha] = useState(false)
   const [mensagem, setMensagem] = useState('')
 
+  const [erros, setErros] = useState({
+    email: '',
+    senha: ''
+  })
+
   const perfisDisponiveis = orgs.filter(org => org.ativa)
 
   function entrar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault()
-    setMensagem('O login real ainda não está disponível. Utilize um dos perfis demonstrativos.')
+
+    const novosErros = {
+      email: '',
+      senha: ''
+    }
+
+    const emailLimpo = email.trim()
+    const formatoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    if (!emailLimpo) {
+      novosErros.email = 'O e-mail é obrigatório.'
+    } else if (!formatoEmail.test(emailLimpo)) {
+      novosErros.email = 'Informe um e-mail válido.'
+    }
+
+    if (!senha) {
+      novosErros.senha = 'A senha é obrigatória.'
+    }
+
+    setErros(novosErros)
+
+    if (novosErros.email || novosErros.senha) {
+      setMensagem('')
+      return
+    }
+
+    setMensagem(
+      'Formulário validado! A autenticação real estará disponível após a integração com a API.'
+    )
+
     setSenha('')
+  }
+
+  function alterarEmail(valor: string) {
+    setEmail(valor)
+
+    if (erros.email) {
+      setErros(anterior => ({
+        ...anterior,
+        email: ''
+      }))
+    }
+
+    setMensagem('')
+  }
+
+  function alterarSenha(valor: string) {
+    setSenha(valor)
+
+    if (erros.senha) {
+      setErros(anterior => ({
+        ...anterior,
+        senha: ''
+      }))
+    }
+
+    setMensagem('')
   }
 
   return (
@@ -38,54 +111,111 @@ export function Acesso({ orgs, setPerfil }: Estado) {
             </p>
           </div>
 
-          <form onSubmit={entrar} className="space-y-5">
+          <form onSubmit={entrar} noValidate className="space-y-5">
             <div>
-              <label htmlFor="email-login" className="block text-sm font-bold text-navy">
+              <label
+                htmlFor="email-login"
+                className="block text-sm font-bold text-navy"
+              >
                 E-mail
               </label>
+
               <div className="relative">
-                <Mail size={18} className="absolute left-3 top-4 text-slate-400" />
+                <Mail
+                  size={18}
+                  aria-hidden="true"
+                  className="absolute left-3 top-4 text-slate-400"
+                />
+
                 <input
                   id="email-login"
                   type="email"
                   value={email}
-                  onChange={evento => setEmail(evento.target.value)}
+                  onChange={evento => alterarEmail(evento.target.value)}
                   placeholder="seuemail@exemplo.com"
                   autoComplete="email"
-                  className={`${campo} pl-10`}
+                  className={`${campo} pl-10 ${
+                    erros.email ? 'border-red-500' : ''
+                  }`}
+                  aria-invalid={!!erros.email}
+                  aria-describedby={erros.email ? 'erro-email-login' : undefined}
                   required
                 />
               </div>
+
+              {erros.email && (
+                <p
+                  id="erro-email-login"
+                  role="alert"
+                  className="mt-1 text-xs font-medium text-red-600"
+                >
+                  {erros.email}
+                </p>
+              )}
             </div>
 
             <div>
-              <label htmlFor="senha-login" className="block text-sm font-bold text-navy">
+              <label
+                htmlFor="senha-login"
+                className="block text-sm font-bold text-navy"
+              >
                 Senha
               </label>
+
               <div className="relative">
-                <LockKeyhole size={18} className="absolute left-3 top-4 text-slate-400" />
+                <LockKeyhole
+                  size={18}
+                  aria-hidden="true"
+                  className="absolute left-3 top-4 text-slate-400"
+                />
+
                 <input
                   id="senha-login"
                   type={mostrarSenha ? 'text' : 'password'}
                   value={senha}
-                  onChange={evento => setSenha(evento.target.value)}
+                  onChange={evento => alterarSenha(evento.target.value)}
                   placeholder="Digite sua senha"
                   autoComplete="current-password"
-                  className={`${campo} pl-10 pr-12`}
+                  className={`${campo} pl-10 pr-12 ${
+                    erros.senha ? 'border-red-500' : ''
+                  }`}
+                  aria-invalid={!!erros.senha}
+                  aria-describedby={erros.senha ? 'erro-senha-login' : undefined}
                   required
                 />
+
                 <button
                   type="button"
                   onClick={() => setMostrarSenha(!mostrarSenha)}
-                  aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+                  aria-label={
+                    mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'
+                  }
+                  aria-pressed={mostrarSenha}
                   className="absolute right-3 top-3.5 text-slate-500 hover:text-bluebrand"
                 >
-                  {mostrarSenha ? <EyeOff size={19} /> : <Eye size={19} />}
+                  {mostrarSenha ? (
+                    <EyeOff size={19} />
+                  ) : (
+                    <Eye size={19} />
+                  )}
                 </button>
               </div>
+
+              {erros.senha && (
+                <p
+                  id="erro-senha-login"
+                  role="alert"
+                  className="mt-1 text-xs font-medium text-red-600"
+                >
+                  {erros.senha}
+                </p>
+              )}
             </div>
 
-            <button type="submit" className={`${botao} w-full gap-2 py-3`}>
+            <button
+              type="submit"
+              className={`${botao} w-full gap-2 py-3`}
+            >
               Entrar
               <ArrowRight size={17} />
             </button>
@@ -96,7 +226,10 @@ export function Acesso({ orgs, setPerfil }: Estado) {
           <div className="mt-6 border-t border-slate-200 pt-5 text-center">
             <p className="text-sm text-slate-600">
               Ainda não tem uma conta?{' '}
-              <Link to="/cadastro" className="font-bold text-bluebrand hover:underline">
+              <Link
+                to="/cadastro"
+                className="font-bold text-bluebrand hover:underline"
+              >
                 Cadastre sua organização
               </Link>
             </p>
@@ -112,10 +245,12 @@ export function Acesso({ orgs, setPerfil }: Estado) {
             <span className="rounded-xl bg-blue-100 p-3 text-bluebrand">
               <Users size={23} />
             </span>
+
             <div>
               <h2 className="font-display text-lg font-extrabold text-navy">
                 Acesso demonstrativo
               </h2>
+
               <p className="text-sm text-slate-500">
                 Experimente os diferentes perfis.
               </p>
@@ -136,15 +271,25 @@ export function Acesso({ orgs, setPerfil }: Estado) {
                 className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-bluebrand hover:shadow-sm"
               >
                 <div>
-                  <h3 className="font-bold text-navy">{org.nome}</h3>
+                  <h3 className="font-bold text-navy">
+                    {org.nome}
+                  </h3>
+
                   <p className="mt-1 text-xs text-slate-500">
                     {org.papel.replaceAll('_', ' ')}
                   </p>
+
                   <span className="mt-2 inline-block text-xs font-medium text-bluebrand">
-                    {org.aprovada ? 'Aprovada' : 'Aguardando aprovação'}
+                    {org.aprovada
+                      ? 'Aprovada'
+                      : 'Aguardando aprovação'}
                   </span>
                 </div>
-                <ArrowRight size={18} className="shrink-0 text-bluebrand" />
+
+                <ArrowRight
+                  size={18}
+                  className="shrink-0 text-bluebrand"
+                />
               </Link>
             ))}
           </div>
