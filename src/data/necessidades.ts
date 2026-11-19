@@ -47,7 +47,7 @@ export const necessidades: Necessidade[] = [
     quantidade: '80 kg de alimentos',
     data: '15/01/2027',
     categoria: 'Alimentação comunitária',
-    imagem: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
+    imagem: 'https://images.unsplash.com/photo-1493770348161-369560ae357d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D',
     destaque: 'CAFÉ SOLIDÁRIO',
     itens: [
       { nome: 'Pães', quantidade: 30, unidade: 'kg' },
@@ -63,7 +63,7 @@ export const necessidades: Necessidade[] = [
     quantidade: '300 kg de alimentos',
     data: '10/02/2027',
     categoria: 'Cestas básicas',
-    imagem: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80',
+    imagem: 'https://media.istockphoto.com/id/75406566/pt/foto/food-in-a-shopping-basket.jpg?s=2048x2048&w=is&k=20&c=lQN2XMRi75cj19u7k6Ci9ytF2t7UIy7XKLXEpdrsww4=',
     destaque: 'CESTAS BÁSICAS',
     itens: [
       { nome: 'Arroz', quantidade: 100, unidade: 'kg' },
@@ -80,7 +80,7 @@ export const necessidades: Necessidade[] = [
     quantidade: '120 kg de alimentos',
     data: '25/01/2027',
     categoria: 'Alimentação comunitária',
-    imagem: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80',
+    imagem: 'https://plus.unsplash.com/premium_photo-1677518438690-29a107f5c3bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D',
     destaque: 'ALMOÇO SOLIDÁRIO',
     itens: [
       { nome: 'Arroz', quantidade: 40, unidade: 'kg' },
@@ -97,7 +97,7 @@ export const necessidades: Necessidade[] = [
     quantidade: '100 kg de alimentos',
     data: '05/02/2027',
     categoria: 'Alimentação infantil',
-    imagem: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=80',
+    imagem: 'https://images.unsplash.com/photo-1761092315416-ed229b18e3d6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D',
     destaque: 'INFÂNCIA SOLIDÁRIA',
     itens: [
       { nome: 'Frutas', quantidade: 40, unidade: 'kg' },
