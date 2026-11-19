@@ -1,4 +1,5 @@
 import { ArrowUpRight, MapPin, PackageCheck } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import type { Oferta } from '../../data/ofertas'
 
 export function CardOferta({ oferta }: { oferta: Oferta }) {
@@ -14,7 +15,8 @@ export function CardOferta({ oferta }: { oferta: Oferta }) {
         <p className="mt-1 text-sm text-slate-500">{oferta.estabelecimento}</p>
         <div className="my-4 h-px bg-slate-100" />
         <div className="space-y-2 text-xs text-slate-500"><p className="flex items-center gap-2"><MapPin size={15} className="text-bluebrand" />{oferta.localizacao}</p><p className="flex items-center gap-2"><PackageCheck size={15} className="text-bluebrand" />{oferta.quantidade}</p></div>
-        <div className="mt-5 flex items-center justify-between text-xs font-bold text-bluebrand"><span>{oferta.validade}</span><ArrowUpRight size={17} aria-hidden="true" /></div>
+        <p className="mt-5 text-xs text-slate-500">{oferta.validade}</p>
+        <Link to={`/ofertas/${oferta.id}`} className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-bluebrand hover:underline">Ver detalhes <ArrowUpRight size={17} aria-hidden="true" /></Link>
       </div>
     </article>
   )
