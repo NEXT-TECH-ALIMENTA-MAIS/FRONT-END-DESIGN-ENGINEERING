@@ -6,6 +6,7 @@ import { Etiqueta, Pagina, campo, painel } from '../../components/Interface/Inte
 import { kg, rotulo, saldo } from '../../data/calculos'
 import { ofertas as ofertasIlustrativas } from '../../data/ofertas'
 import type { Estado } from '../../data/estado'
+import { AlimentosApi } from '../../components/AlimentosApi/AlimentosApi'
 
 const categorias = ['Todos', 'Frutas', 'Hortaliças', 'Padaria', 'Não perecíveis']
 const ITENS_POR_PAGINA = 5
@@ -82,5 +83,6 @@ export function ListaOfertas({ ofertas, orgs, pedidos }: Estado) {
         <Link className="mt-4 inline-block font-bold text-bluebrand" to={`/ofertas/${o.id}`}>Ver detalhes →</Link>
       </article>)}</div>
     </section>}
+     <AlimentosApi />
   </Pagina>
 }
