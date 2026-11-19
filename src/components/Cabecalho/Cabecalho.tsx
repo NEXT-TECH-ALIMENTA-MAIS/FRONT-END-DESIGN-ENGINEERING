@@ -12,7 +12,7 @@ const paginas = [
 const institucionais = [
   { nome: 'Sobre', caminho: '/Sobre' },
   { nome: 'Integrantes', caminho: '/#' },
-  { nome: 'FAQ', caminho: '/#' },
+  { nome: 'FAQ', caminho: '/faq' },
   { nome: 'Contato', caminho: '/#' },
 ]
 
@@ -103,18 +103,29 @@ export function Cabecalho() {
           </NavLink>
         ))}
 
-        {institucionais.map(pagina => (
-          <NavLink
-            key={pagina.nome}
-            to={pagina.caminho}
-            onClick={() => setMenuAberto(false)}
-            className={({ isActive }) =>
-              `py-2 hover:text-sun ${isActive ? 'text-sun' : ''}`
-            }
-          >
-            {pagina.nome}
-          </NavLink>
-        ))}
+        {institucionais.map(pagina =>
+          pagina.caminho !== '/#' ? (
+            <NavLink
+              key={pagina.nome}
+              to={pagina.caminho}
+              onClick={() => setMenuAberto(false)}
+              className={({ isActive }) =>
+                `py-2 hover:text-sun ${isActive ? 'text-sun' : ''}`
+              }
+            >
+              {pagina.nome}
+            </NavLink>
+          ) : (
+            <span
+              key={pagina.nome}
+              aria-disabled="true"
+              className="py-2 text-blue-200/75"
+            >
+              {pagina.nome}
+              <span className="text-xs"> (em breve)</span>
+            </span>
+          )
+        )}
 
         <Link
           to={perfil ? '/painel' : '/acesso'}
@@ -123,16 +134,6 @@ export function Cabecalho() {
         >
           {perfil ? 'Acessar demonstração' : 'Entrar'}
         </Link>
-
-        {perfil && <p className="py-2 text-blue-100">Olá, {perfil.nome} <span className="text-xs">(perfil fictício)</span></p>}
-        {paginas.map(pagina => <NavLink key={pagina.caminho} to={pagina.caminho} end={pagina.caminho === '/'} onClick={() => setMenuAberto(false)} className={({ isActive }) => `py-2 hover:text-sun ${isActive ? 'text-sun' : ''}`}>{pagina.nome}</NavLink>)}
-        <NavLink to="/faq" onClick={() => setMenuAberto(false)} className={({ isActive }) => `py-2 hover:text-sun ${isActive ? 'text-sun' : ''}`}>FAQ</NavLink>
-        {institucionais.map(pagina => (
-          <span key={pagina.caminho} aria-disabled="true" className="py-2 text-blue-200/75">
-            {pagina.nome} <span className="text-xs">(em breve)</span>
-          </span>
-        ))}
-        <Link to={perfil ? '/painel' : '/acesso'} onClick={() => setMenuAberto(false)} className="py-2 text-sun">{perfil ? 'Acessar demonstração' : 'Entrar'}</Link>
       </div>
     </nav>
   </header>

@@ -95,3 +95,46 @@ Assim como no projeto usado em aula, cada página fica em sua própria pasta e a
 
 Exemplo: `src/pages/ListaOfertas/ListaOfertas.tsx` contém a listagem, e `src/components/CardOferta/CardOferta.tsx` contém o cartão da home. Usamos nomes iguais aos das pastas para facilitar a identificação dos arquivos.
 O `MainLayout` em `src/layouts` reúne o cabeçalho e o rodapé compartilhados por todas as páginas. A busca do cabeçalho direciona para a lista de ofertas da demonstração. Os links institucionais serão adicionados quando as páginas estiverem prontas.
+
+## Painel da organização — primeira etapa
+
+Branch: `feature/painel`, criada a partir de `develop`. Não há links no menu para este novo painel. A demonstração antiga em `/painel` continua separada.
+
+Execute `npm run dev` e abra diretamente:
+
+- Estabelecimento: http://localhost:5173/painel/estabelecimento
+- Instituição: http://localhost:5173/painel/instituicao
+
+Use o mesmo endereço base nas duas abas (não misture `localhost` e `127.0.0.1`), pois o armazenamento pertence à origem do site.
+
+### O que está pronto
+
+- Perfil com edição de nome, CNPJ, responsável, e-mail, telefone, endereço e descrição. Tipo, aprovação e situação da conta não são editáveis pelo cliente. O formato do CNPJ é verificado; a validação cadastral definitiva será da API.
+- Listagem de ofertas próprias para estabelecimento e necessidades próprias para instituição.
+- Negociações com filtros, contatos fictícios, orientações e histórico com autor e data de cada alteração.
+- Início, recusa, cancelamento, múltiplas retiradas, confirmação independente de recebimento e conclusão total ou parcial.
+- Um atendimento ativo por oferta; justificativa obrigatória nas exceções; divergências bloqueiam a conclusão.
+- Persistência no `localStorage` e atualização entre abas do mesmo navegador. As alterações não são enviadas ao Java nem ao Oracle.
+
+### Roteiro para testar
+
+1. Abra o painel do estabelecimento e edite os dados em **Minha organização**. Atualize a página para verificar que continuam salvos.
+2. Em **Minhas publicações**, confira a oferta de 50 kg de arroz.
+3. Em **Negociações**, inicie o pedido de 20 kg da Instituição Mãos Unidas. O outro pedido permanece pendente.
+4. Registre uma retirada de 20 kg. O saldo ainda aguarda a confirmação da instituição.
+5. Em outra aba, abra `/painel/instituicao`, entre em **Negociações** e confirme 20 kg recebidos.
+6. Volte ao estabelecimento: o histórico mostra a confirmação e o saldo passa a 30 kg. Conclua o atendimento para liberar a próxima solicitação.
+7. Para testar várias viagens, entregue e confirme 10 kg por vez. Para testar divergência, informe valores diferentes com justificativa; esse caso ficará pendente, pois a análise administrativa deste painel ainda será integrada.
+
+As solicitações e publicações desta primeira etapa são exemplos previamente cadastrados e separados do catálogo público. Abrir um contato no catálogo não cria automaticamente uma negociação aqui. Criação de publicações, novas solicitações pelo catálogo, login e integração administrativa serão conectados nas próximas etapas. Não há sincronização entre computadores. A URL permite testar um perfil, mas não é autenticação nem proteção de acesso.
+
+### Como explicar o código
+
+- `PainelCliente` organiza a página e suas três seções.
+- `PerfilOrganizacao` contém o formulário; `NegociacaoPainel` apresenta cada solicitação e suas ações. Cada componente fica na pasta de mesmo nome.
+- `useState` guarda o formulário, a seção selecionada e os dados exibidos.
+- `useEffect` escuta alterações de armazenamento feitas em outra aba e remove esse evento ao sair da página.
+- `src/data/painelCliente.ts` define os tipos e o cenário fictício.
+- `src/services/painelCliente.ts` concentra leitura, gravação e regras de negociação. A API Java substituirá o armazenamento local e deverá validar novamente permissões e estoque. Somente o backend acessará o Oracle.
+
+Validação: `npm run build`, `npm run lint` e `node --test tests/painelCliente.test.mjs` (Node 24). Os testes cobrem as regras e a persistência; não substituem a conferência visual em celular e desktop.
