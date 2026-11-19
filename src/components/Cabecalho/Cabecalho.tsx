@@ -13,7 +13,7 @@ const institucionais = [
   { nome: 'Sobre', caminho: '/Sobre' },
   { nome: 'Integrantes', caminho: '/#' },
   { nome: 'FAQ', caminho: '/#' },
-  { nome: 'Contato', caminho: '/Contato' },
+  { nome: 'Contato', caminho: '' },
 ]
 
 export function Cabecalho() {
