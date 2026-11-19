@@ -17,7 +17,10 @@ export function CardIntegrante({
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition-shadow hover:shadow-md">
       <div className="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-[#e8f0fd]">
-        <UserRound size={42} className="text-bluebrand" />
+        <UserRound
+          size={42}
+          className="text-bluebrand"
+        />
       </div>
 
       <h3 className="font-display text-xl font-extrabold text-navy">
