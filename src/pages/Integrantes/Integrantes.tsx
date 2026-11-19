@@ -1,14 +1,15 @@
 
 import { Users, HeartHandshake, Lightbulb, Code2 } from 'lucide-react'
 import { MainLayout } from '../../layouts/MainLayout/MainLayout'
+import { CardIntegrante } from '../../components/CardIntegrante/CardIntegrante'
 
 export function Integrantes() {
   return (
     <MainLayout>
       <main>
+        {/* Apresentação da equipe */}
         <section className="bg-[#e8f0fd] px-4 py-12 text-center sm:py-16">
           <div className="mx-auto max-w-3xl">
-
             <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-bold text-bluebrand">
               <Users size={16} />
               EQUIPE ALIMENTA+
@@ -24,12 +25,11 @@ export function Integrantes() {
               estabelecimentos com alimentos disponíveis para doação
               a instituições que precisam recebê-los.
             </p>
-
           </div>
         </section>
 
+        {/* Propósito do projeto */}
         <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
-
           <div className="mb-10 text-center">
             <h2 className="font-display text-2xl font-extrabold text-navy sm:text-3xl">
               Nosso propósito
@@ -43,7 +43,6 @@ export function Integrantes() {
           </div>
 
           <div className="grid gap-5 md:grid-cols-3">
-
             <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
               <HeartHandshake
                 size={32}
@@ -91,7 +90,31 @@ export function Integrantes() {
                 durante nossa formação na FIAP.
               </p>
             </div>
+          </div>
+        </section>
 
+        {/* Cards dos integrantes */}
+        <section className="bg-[#f6f8fc] px-4 py-12 sm:px-6 sm:py-16">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 text-center">
+              <h2 className="font-display text-2xl font-extrabold text-navy sm:text-3xl">
+                Integrantes do projeto
+              </h2>
+
+              <p className="mt-3 text-sm text-slate-600 sm:text-base">
+                Conheça as pessoas que participaram do desenvolvimento
+                do Alimenta+.
+              </p>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <CardIntegrante
+                nome="Integrante 1"
+                rm="000000"
+                funcao="Desenvolvimento"
+                descricao="Participação no desenvolvimento da solução Alimenta+."
+              />
+            </div>
           </div>
         </section>
       </main>
