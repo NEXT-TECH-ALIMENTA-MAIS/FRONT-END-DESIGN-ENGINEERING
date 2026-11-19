@@ -9,7 +9,7 @@ import {
 import { MainLayout } from '../../layouts/MainLayout/MainLayout'
 import { CardIntegrante } from '../../components/CardIntegrante/CardIntegrante'
 
-// Dados dos integrantes do Alimenta+
+// Dados dos cinco integrantes do Alimenta+
 const integrantes = [
   {
     nome: 'Allex Oliveira Costa',
@@ -175,8 +175,8 @@ export function Integrantes() {
               </p>
             </div>
 
-            {/* Cards dos cinco integrantes */}
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Cards responsivos dos cinco integrantes */}
+            <div className="mx-auto grid max-w-sm grid-cols-1 gap-6 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {integrantes.map((integrante) => (
                 <CardIntegrante
                   key={integrante.rm}
