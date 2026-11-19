@@ -1,6 +1,12 @@
+
 import { useState, type FormEvent } from 'react'
 import {
-    Send
+    ArrowRight,
+    HeartHandshake,
+    Mail,
+    MessageCircle,
+    Send,
+    ShieldCheck
 } from 'lucide-react'
 import { MainLayout } from '../../layouts/MainLayout/MainLayout'
 
@@ -27,12 +33,14 @@ export function Contato() {
         formulario.reset()
         setEnviado(true)
     }
+
     const estiloCampo =
         'mt-2 w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-bluebrand focus:ring-2 focus:ring-bluebrand/20'
 
     return (
         <MainLayout>
             <main>
+                {/* Apresentação da página */}
                 <section className="bg-[#e8f0ff] px-4 py-14 sm:px-6 md:py-20 lg:px-8">
                     <div className="mx-auto max-w-7xl">
                         <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-widest text-bluebrand">
@@ -148,6 +156,8 @@ export function Contato() {
                                 </a>
                             </div>
                         </div>
+
+                        {/* Coluna do formulário */}
                         <div className="min-w-0">
                             <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
 
@@ -287,7 +297,6 @@ export function Contato() {
                                         </div>
                                     )}
 
-
                                     <p className="text-center text-xs leading-5 text-slate-500">
                                         Formulário demonstrativo. Nenhuma mensagem
                                         será enviada ou armazenada.
@@ -296,9 +305,9 @@ export function Contato() {
 
                             </div>
                         </div>
-
-
-                    </main >
-                </MainLayout >
-                )
+                    </div>
+                </section>
+            </main>
+        </MainLayout>
+    )
 }
