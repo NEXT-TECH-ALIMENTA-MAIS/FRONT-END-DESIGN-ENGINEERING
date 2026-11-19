@@ -1,5 +1,5 @@
 
-import { useState, type FormEvent } from 'react'
+import { useState, type SubmitEvent } from 'react'
 import {
     ArrowRight,
     HeartHandshake,
@@ -13,7 +13,7 @@ import { MainLayout } from '../../layouts/MainLayout/MainLayout'
 export function Contato() {
     const [enviado, setEnviado] = useState(false)
 
-    function enviarMensagem(evento: FormEvent<HTMLFormElement>) {
+    function enviarMensagem(evento: SubmitEvent<HTMLFormElement>) {
         evento.preventDefault()
 
         const formulario = evento.currentTarget
