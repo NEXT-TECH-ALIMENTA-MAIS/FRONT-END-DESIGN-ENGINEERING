@@ -1,6 +1,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
-import { RefreshCw, PackageCheck } from 'lucide-react'
+import { RefreshCw, PackageCheck, ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { listaNecessidadesReais } from '../../services/necessidadesApi'
 import type { Necessidade } from '../../data/modelos'
 
@@ -82,6 +83,8 @@ export function ListaNecessidadesReais({ busca = '' }: Props) {
   }, [])
 
 
+  const buscaNormalizada = busca.toLocaleLowerCase('pt-BR')
+
   const necessidadesFiltradas = necessidades.filter(n => {
     const texto = [
       n.titulo,
@@ -92,16 +95,22 @@ export function ListaNecessidadesReais({ busca = '' }: Props) {
       .join(' ')
       .toLocaleLowerCase('pt-BR')
 
-    return texto.includes(busca.toLocaleLowerCase('pt-BR'))
+    return texto.includes(buscaNormalizada)
   })
 
 
   return (
-    <section className="mt-10 border-t border-slate-200 pt-8">
+    <section
+      className="mt-10 border-t border-slate-200 pt-8"
+      aria-labelledby="titulo-necessidades-reais"
+    >
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="font-display text-xl font-extrabold text-navy">
+          <h2
+            id="titulo-necessidades-reais"
+            className="font-display text-xl font-extrabold text-navy"
+          >
             Necessidades cadastradas
           </h2>
 
@@ -120,7 +129,10 @@ export function ListaNecessidadesReais({ busca = '' }: Props) {
             hover:border-bluebrand
             disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <RefreshCw size={16} />
+          <RefreshCw
+            size={16}
+            className={carregando ? 'animate-spin' : ''}
+          />
           Atualizar
         </button>
       </div>
@@ -139,7 +151,10 @@ export function ListaNecessidadesReais({ busca = '' }: Props) {
       )}
 
       {apiHabilitada && carregando && (
-        <p className="mt-6 text-sm text-slate-500">
+        <p
+          role="status"
+          className="mt-6 text-sm text-slate-500"
+        >
           Carregando necessidades...
         </p>
       )}
@@ -178,8 +193,8 @@ export function ListaNecessidadesReais({ busca = '' }: Props) {
             {necessidadesFiltradas.map(necessidade => (
               <article
                 key={necessidade.id}
-                className="overflow-hidden rounded-2xl border
-                  border-slate-200 bg-white p-5
+                className="flex flex-col overflow-hidden rounded-2xl
+                  border border-slate-200 bg-white p-5
                   transition duration-200
                   hover:-translate-y-1 hover:shadow-xl"
               >
@@ -218,6 +233,18 @@ export function ListaNecessidadesReais({ busca = '' }: Props) {
                       {item.nome}: {item.quantidade} kg
                     </p>
                   ))}
+                </div>
+
+                <div className="mt-auto pt-5">
+                  <Link
+                    to={`/necessidades/reais/${necessidade.id}`}
+                    className="inline-flex items-center gap-2
+                      text-sm font-bold text-bluebrand
+                      transition hover:underline"
+                  >
+                    Ver detalhes
+                    <ArrowRight size={16} />
+                  </Link>
                 </div>
 
               </article>

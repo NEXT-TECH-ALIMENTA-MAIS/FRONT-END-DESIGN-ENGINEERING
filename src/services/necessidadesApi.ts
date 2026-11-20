@@ -17,3 +17,21 @@ export async function listaNecessidadesReais(): Promise<Necessidade[]> {
 
   return consultarApi<Necessidade[]>('/necessidades')
 }
+
+export async function buscarNecessidadeRealPorId(
+  id: number
+): Promise<Necessidade | null> {
+  if (usarMock) {
+    const necessidades = await listaNecessidadesReais()
+
+    return necessidades.find(n => n.id === id) ?? null
+  }
+
+  try {
+    return await consultarApi<Necessidade>(
+      `/necessidades/${id}`
+    )
+  } catch (error) {
+    throw error
+  }
+}
