@@ -1,4 +1,3 @@
-
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -7,6 +6,7 @@ import { Pagina, campo, painel } from '../../components/Interface/Interface'
 import { kg, rotulo } from '../../data/calculos'
 import { necessidades as necessidadesIlustrativas } from '../../data/necessidades'
 import type { Estado } from '../../data/estado'
+import { ListaNecessidadesReais } from './ListaNecessidadesReais'
 
 const categorias = [
   'Todos',
@@ -30,7 +30,6 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
     setParametros(valor ? { busca: valor } : {})
   }
 
-  // Filtra as necessidades ilustrativas
   const resultados = useMemo(() => {
     return necessidadesIlustrativas.filter(necessidade => {
       const combinaCategoria =
@@ -52,7 +51,6 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
     })
   }, [busca, categoria])
 
-  // Paginação
   const quantidadePaginas = Math.ceil(
     resultados.length / ITENS_POR_PAGINA
   )
@@ -67,7 +65,6 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
     (paginaAtual + 1) * ITENS_POR_PAGINA
   )
 
-  // Necessidades cadastradas na demonstração
   const necessidadesDaDemonstracao = necessidades.filter(n =>
     orgs.some(o =>
       o.id === n.instituicao && o.ativa
@@ -104,13 +101,8 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
               Explore as campanhas e necessidades das instituições.
             </p>
           </div>
-
-          <span className="w-fit rounded-full bg-blue-100 px-3 py-1.5 text-xs font-bold text-bluebrand">
-            Dados fictícios
-          </span>
         </div>
 
-        {/* Campo de busca */}
         <label className="relative mt-5 block max-w-xl">
           <Search
             size={18}
@@ -127,9 +119,8 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
           />
         </label>
 
-        {/* Filtros por categoria */}
         <p className="mt-5 text-xs text-slate-500">
-          Filtrar as necessidades por categoria:
+          Filtrar as necessidades ilustrativas por categoria:
         </p>
 
         <div
@@ -153,7 +144,37 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
           ))}
         </div>
 
-        {/* Cards ilustrativos */}
+      </section>
+
+
+      <ListaNecessidadesReais busca={busca} />
+
+
+      <section
+        className="mt-12 border-t border-slate-200 pt-8"
+        aria-labelledby="titulo-ilustrativas"
+      >
+
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2
+              id="titulo-ilustrativas"
+              className="font-display text-xl font-extrabold text-navy"
+            >
+              Necessidades ilustrativas
+            </h2>
+
+            <p className="mt-1 text-sm text-slate-500">
+              Exemplos visuais de campanhas e necessidades
+              das instituições.
+            </p>
+          </div>
+
+          <span className="w-fit rounded-full bg-blue-100 px-3 py-1.5 text-xs font-bold text-bluebrand">
+            Dados fictícios
+          </span>
+        </div>
+
         {itensDaPagina.length ? (
           <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {itensDaPagina.map(necessidade => (
@@ -175,11 +196,10 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
           </div>
         )}
 
-        {/* Paginação */}
         {quantidadePaginas > 1 && (
           <nav
             className="mt-6 flex items-center justify-center gap-4"
-            aria-label="Paginação das necessidades"
+            aria-label="Paginação das necessidades ilustrativas"
           >
             <button
               type="button"
@@ -220,7 +240,7 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
 
       </section>
 
-      {/* Necessidades cadastradas na demonstração */}
+
       {necessidadesDaDemonstracao.length > 0 && (
         <section className="mt-12 border-t border-slate-200 pt-8">
 

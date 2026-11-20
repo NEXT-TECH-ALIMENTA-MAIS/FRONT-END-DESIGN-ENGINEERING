@@ -22,6 +22,7 @@ import { Sobre } from './Sobre/Sobre'
 import { Contato } from './Contato/Contato'
 import { PainelAdmin } from './PainelAdmin/PainelAdmin'
 import { Integrantes } from './Integrantes/Integrantes'
+import { DetalheNecessidadeReal } from './DetalheNecessidadeReal/DetalheNecessidadeReal'
 
 export function Demonstracao() {
   const [orgs, setOrgs] = useState(organizacoesIniciais)
@@ -60,6 +61,9 @@ export function Demonstracao() {
         <Route path="/painel" element={<EntradaPainel />} />
         <Route path="/demonstracao/painel" element={<Painel {...estado} />} />
         <Route path="/retiradas/:id" element={<Retiradas {...estado} />} />
+        <Route element={<ListaNecessidades {...estado} />} />
+        <Route path="/necessidades/reais/:id" element={<DetalheNecessidadeReal />} />
+        <Route path="/necessidades/:id" element={<DetalheNecessidade {...estado} />} />
         <Route
           path="*"
           element={
