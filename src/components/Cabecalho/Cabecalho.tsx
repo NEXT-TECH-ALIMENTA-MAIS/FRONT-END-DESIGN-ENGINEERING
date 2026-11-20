@@ -1,4 +1,4 @@
-import { HeartHandshake, Menu, Search, UserRound, X } from 'lucide-react'
+import { ArrowRight, HeartHandshake, LogOut, Menu, Search, UserRound, X } from 'lucide-react'
 import { useContext, useState, type FormEvent } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { PerfilContext } from '../../context/PerfilContext'
@@ -17,10 +17,18 @@ const institucionais = [
 ]
 
 export function Cabecalho() {
-  const perfil = useContext(PerfilContext)
+  const { organizacao: perfil, sair } = useContext(PerfilContext)
   const [menuAberto, setMenuAberto] = useState(false)
+  const [resumoAberto, setResumoAberto] = useState(false)
   const [busca, setBusca] = useState('')
   const navegar = useNavigate()
+
+  function encerrarAcesso() {
+    sair()
+    setResumoAberto(false)
+    setMenuAberto(false)
+    navegar('/acesso')
+  }
 
   function pesquisar(evento: FormEvent) {
     evento.preventDefault()
@@ -40,10 +48,22 @@ export function Cabecalho() {
         <input id="busca-cabecalho" value={busca} onChange={e => setBusca(e.target.value)} className="min-w-0 flex-1 px-4 text-sm text-slate-800 outline-none placeholder:text-slate-400" placeholder="Busque alimentos ou localização" />
         <button type="submit" aria-label="Buscar ofertas" className="flex w-13 shrink-0 items-center justify-center bg-sun text-navy hover:bg-yellow-300"><Search size={20} /></button>
       </form>
-      <Link to={perfil ? '/painel' : '/acesso'} className="ml-auto flex shrink-0 items-center gap-2 rounded-lg px-2 py-1 text-sm hover:bg-white/10 sm:px-3" aria-label={perfil ? `Olá, ${perfil.nome}. Acessar demonstração` : 'Entrar na demonstração'}>
-        <UserRound size={22} />
-        {perfil ? <span className="hidden max-w-48 sm:block"><span className="block truncate text-xs text-blue-100">Olá, {perfil.nome}</span><strong>Acessar demonstração</strong><span className="block text-xs text-blue-200">Perfil fictício</span></span> : <strong>Entrar</strong>}
-      </Link>
+      <div className="relative ml-auto shrink-0">
+        {perfil ? <>
+          <button type="button" onClick={() => setResumoAberto(!resumoAberto)} aria-expanded={resumoAberto} aria-controls="resumo-organizacao" className="flex items-center gap-2 rounded-xl px-2 py-2 text-left hover:bg-white/10 sm:px-3">
+            <UserRound size={23} className="shrink-0" aria-hidden="true"/>
+            <span className="max-w-40 sm:max-w-56"><span className="block truncate text-xs text-blue-100">Olá, {perfil.nome}</span><strong className="block text-sm sm:text-base">Minha organização</strong><span className="block text-xs text-blue-200">{perfil.papel === 'ESTABELECIMENTO' ? 'Estabelecimento' : perfil.papel === 'INSTITUICAO' ? 'Instituição' : 'Administrador'}</span></span>
+          </button>
+          {resumoAberto && <section id="resumo-organizacao" className="absolute right-0 top-full z-50 mt-2 w-[min(21rem,calc(100vw-2rem))] rounded-2xl border border-slate-200 bg-white p-5 text-slate-800 shadow-xl" aria-label="Resumo da organização">
+            <p className="text-xs font-bold uppercase tracking-wider text-bluebrand">Área da organização</p>
+            <h2 className="mt-1 truncate font-display text-lg font-extrabold text-navy">{perfil.nome}</h2>
+            <div className="mt-4 rounded-xl bg-blue-50 p-3"><p className="text-xs text-slate-500">Tipo de conta</p><p className="mt-1 text-sm font-bold text-navy">{perfil.papel === 'ESTABELECIMENTO' ? 'Estabelecimento doador' : perfil.papel === 'INSTITUICAO' ? 'Instituição receptora' : 'Administrador'}</p></div>
+            <p className="mt-4 text-sm leading-5 text-slate-600">Acompanhe suas publicações, solicitações e retiradas no painel da organização.</p>
+            <Link to="/painel" onClick={() => setResumoAberto(false)} className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-bluebrand px-4 py-3 text-sm font-bold text-white hover:bg-navy">Abrir painel <ArrowRight size={17}/></Link>
+            <button type="button" onClick={encerrarAcesso} className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50"><LogOut size={17}/> Sair da conta</button>
+          </section>}
+        </> : <Link to="/acesso" className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm hover:bg-white/10 sm:px-3" aria-label="Entrar"><UserRound size={22}/><strong>Entrar</strong></Link>}
+      </div>
     </div>
 
     <div className="border-t border-white/10 bg-[#16366f]">
@@ -116,14 +136,7 @@ export function Cabecalho() {
               {pagina.nome}
             </NavLink>
           ) : (
-            <span
-              key={pagina.nome}
-              aria-disabled="true"
-              className="py-2 text-blue-200/75"
-            >
-              {pagina.nome}
-              <span className="text-xs"> (em breve)</span>
-            </span>
+            <span key={pagina.nome} aria-disabled="true" className="py-2 text-blue-200/75">{pagina.nome}<span className="text-xs"> (em breve)</span></span>
           )
         )}
 
@@ -134,6 +147,7 @@ export function Cabecalho() {
         >
           {perfil ? 'Acessar demonstração' : 'Entrar'}
         </Link>
+        {perfil && <button type="button" onClick={encerrarAcesso} className="py-2 text-left text-blue-100">Sair da conta</button>}
       </div>
     </nav>
   </header>

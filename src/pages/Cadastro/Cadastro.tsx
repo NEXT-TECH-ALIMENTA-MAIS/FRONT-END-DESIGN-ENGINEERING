@@ -1,3 +1,5 @@
+import { apiConfigurada, enviarParaApi } from '../../services/api'
+import type { OrganizacaoApi } from '../../services/painelApi'
 
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
@@ -89,6 +91,11 @@ function ErroCampo({ id, texto }: { id: string; texto?: string }) {
 
 export function Cadastro({ orgs, setOrgs }: Estado) {
   const [nome, setNome] = useState('')
+  const [razaoSocial, setRazaoSocial] = useState('')
+  const [login, setLogin] = useState('')
+  const [endereco, setEndereco] = useState('')
+  const [tipoDetalhe, setTipoDetalhe] = useState('')
+  const [salvando, setSalvando] = useState(false)
   const [cnpj, setCnpj] = useState('')
   const [email, setEmail] = useState('')
   const [telefone, setTelefone] = useState('')
@@ -107,8 +114,9 @@ export function Cadastro({ orgs, setOrgs }: Estado) {
     setMensagem(null)
   }
 
-  function enviar(evento: FormEvent<HTMLFormElement>) {
+  async function enviar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault()
+    if (salvando) return
 
     const novosErros: ErrosCadastro = {}
     const numero = cnpj.replace(/\D/g, '')
@@ -141,11 +149,11 @@ export function Cadastro({ orgs, setOrgs }: Estado) {
       novosErros.confirmarSenha = 'As senhas não coincidem.'
     }
 
-    if (orgs.some(org => org.cnpj.replace(/\D/g, '') === numero)) {
+    if (!apiConfigurada && orgs.some(org => org.cnpj.replace(/\D/g, '') === numero)) {
       novosErros.cnpj = 'Este CNPJ já está cadastrado.'
     }
 
-    if (orgs.some(org => org.email.toLowerCase() === emailNormalizado)) {
+    if (!apiConfigurada && orgs.some(org => org.email.toLowerCase() === emailNormalizado)) {
       novosErros.email = 'Este e-mail já está cadastrado.'
     }
 
@@ -156,6 +164,26 @@ export function Cadastro({ orgs, setOrgs }: Estado) {
         tipo: 'erro',
         texto: 'Corrija os campos destacados para continuar.'
       })
+      return
+    }
+
+    if (apiConfigurada) {
+      if (!razaoSocial.trim() || !login.trim() || !endereco.trim() || !tipoDetalhe.trim() || senha.length > 100) {
+        setMensagem({ tipo: 'erro', texto: 'Informe razão social, login, endereço e ramo de atuação. A senha deve ter até 100 caracteres.' })
+        return
+      }
+      setSalvando(true)
+      try {
+        const criada = await enviarParaApi<OrganizacaoApi>('/api/organizacoes', {
+          cnpj: numero, tipo: papel, razaoSocial: razaoSocial.trim(), nomeFantasia: nome.trim(),
+          login: login.trim(), senha, emailContato: emailNormalizado, telefone: telefoneNumero,
+          endereco: endereco.trim(), tipoDetalhe: tipoDetalhe.trim(),
+        })
+        setMensagem({ tipo: 'sucesso', texto: 'Cadastro #' + criada.id + ' confirmado pela API. Aguarde aprovação administrativa. O login ainda depende da implementação de autenticação no Java.' })
+        setSenha(''); setConfirmarSenha('')
+      } catch (falha) {
+        setMensagem({ tipo: 'erro', texto: falha instanceof Error ? falha.message : 'Não foi possível cadastrar.' })
+      } finally { setSalvando(false) }
       return
     }
 
@@ -191,7 +219,7 @@ export function Cadastro({ orgs, setOrgs }: Estado) {
     erros[nomeCampo] ? 'border-red-500' : ''
 
   return (
-    <Pagina titulo="Cadastre sua organização">
+    <Pagina titulo="Cadastre sua organização" aviso={apiConfigurada ? "Cadastro conectado à API Java. O acesso depende de aprovação e da implementação do login." : undefined}>
       <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1.3fr_0.7fr]">
         <section className={`${painel} shadow-sm`}>
           <div className="mb-7">
@@ -224,6 +252,13 @@ export function Cadastro({ orgs, setOrgs }: Estado) {
           )}
 
           <form onSubmit={enviar} noValidate className="space-y-5">
+            <fieldset disabled={salvando} className="space-y-5">
+            {apiConfigurada && <div className="grid gap-4 sm:grid-cols-2">
+              <label className="text-sm font-bold">Razão social<input required maxLength={160} className={campo} value={razaoSocial} onChange={e => setRazaoSocial(e.target.value)}/></label>
+              <label className="text-sm font-bold">Login da organização<input required maxLength={160} autoComplete="username" className={campo} value={login} onChange={e => setLogin(e.target.value)}/></label>
+              <label className="text-sm font-bold">Endereço<input required maxLength={250} className={campo} value={endereco} onChange={e => setEndereco(e.target.value)}/></label>
+              <label className="text-sm font-bold">Ramo de atuação<input required maxLength={40} placeholder="Ex.: PADARIA ou ONG" className={campo} value={tipoDetalhe} onChange={e => setTipoDetalhe(e.target.value)}/></label>
+            </div>}
             <div>
               <label htmlFor="tipo-organizacao" className="block text-sm font-bold text-navy">
                 Tipo de organização
@@ -404,14 +439,14 @@ export function Cadastro({ orgs, setOrgs }: Estado) {
             </div>
 
             <button type="submit" className={`${botao} w-full gap-2 py-3`}>
-              Cadastrar organização
+              {salvando ? 'Cadastrando…' : 'Cadastrar organização'}
               <ArrowRight size={17} />
             </button>
 
             <p className="text-center text-xs leading-5 text-slate-500">
-              Ambiente demonstrativo. Não utilize dados pessoais ou senhas reais.
-              As senhas não são armazenadas e o cadastro não é enviado à API.
+              {apiConfigurada ? 'O cadastro será enviado à API. A senha não é armazenada no navegador.' : 'Ambiente demonstrativo. Não utilize dados pessoais ou senhas reais. O cadastro não é enviado à API.'}
             </p>
+            </fieldset>
           </form>
 
           <div className="mt-6 border-t border-slate-200 pt-5 text-center">
@@ -471,7 +506,7 @@ export function Cadastro({ orgs, setOrgs }: Estado) {
 
           <div className="mt-8 rounded-xl bg-blue-100 p-4">
             <p className="text-xs leading-5 text-navy">
-              Após o cadastro demonstrativo, a organização fica aguardando
+              Após o cadastro, a organização fica aguardando
               aprovação do administrador.
             </p>
           </div>
