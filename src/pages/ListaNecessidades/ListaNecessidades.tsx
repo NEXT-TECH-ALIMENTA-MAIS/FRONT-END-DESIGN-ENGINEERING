@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { CampanhasApi } from '../../components/CampanhasApi/CampanhasApi'
 import { CardNecessidade } from '../../components/CardNecessidade/CardNecessidade'
 import { Pagina, campo, painel } from '../../components/Interface/Interface'
 import { kg, rotulo } from '../../data/calculos'
@@ -288,6 +289,16 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
 
         </section>
       )}
+
+      <details className="mt-10 rounded-2xl border border-slate-200 bg-white p-5">
+        <summary className="cursor-pointer font-display text-lg font-bold text-navy">
+          Cadastrar campanha
+        </summary>
+        <p className="mt-3 text-sm text-slate-600">
+          Defina o período e as metas de alimentos da campanha da instituição.
+        </p>
+        <CampanhasApi />
+      </details>
 
     </Pagina>
   )
