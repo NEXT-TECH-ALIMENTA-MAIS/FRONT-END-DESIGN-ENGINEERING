@@ -2,6 +2,32 @@
 
 Projeto acadêmico da Global Solution FIAP que conecta estabelecimentos com alimentos para doar a instituições que precisam recebê-los. Não há compras, pagamentos ou chat: as partes combinam a retirada fora da plataforma.
 
+## Entrega da Global Solution 2026/2
+
+**Objetivo:** reduzir o desperdício de alimentos e aproximar doadores e instituições por meio de ofertas, necessidades e campanhas de arrecadação. O projeto se relaciona aos ODS 2 (Fome Zero) e 12 (Consumo e Produção Responsáveis).
+
+| Recurso | Endereço |
+| --- | --- |
+| Aplicação publicada | https://alimentamais-seven.vercel.app/ |
+| API Java | https://alimentamais-api.onrender.com |
+| Repositório GitHub | https://github.com/NEXT-TECH-ALIMENTA-MAIS/FRONT-END-DESIGN-ENGINEERING |
+| Vídeo de apresentação | https://youtu.be/dbkJqHgJlvE |
+| Contato | Formulário em https://alimentamais-seven.vercel.app/contato |
+
+**Turma:** 1TDSPO.
+
+| Integrante | RM |
+| --- | --- |
+| Mateus Isaque Maranhão | 571365 |
+| Allex Oliveira Costa | 571648 |
+| Murilo Santos da Cruz | 572704 |
+| Igor Cinacchi Gracetti | 573708 |
+| Roberto Yong Sung Park | 572229 |
+
+Esta entrega usa React, Vite, TypeScript, Tailwind CSS e Fetch API. O navegador acessa a API Java, que se comunica com o Oracle. A configuração da API fica em `VITE_API_URL`; copie `.env.example` para `.env.local` para executar localmente. A Vercel precisa da mesma variável configurada em seu ambiente.
+
+**Uso de IA generativa:** ChatGPT/Codex apoiou revisão do código, explicação de conceitos, documentação e organização da entrega. O grupo deve revisar e compreender o código e o texto antes da apresentação.
+
 ## Tecnologias e estrutura
 
 - React, Vite e TypeScript; React Router para navegação e Tailwind CSS para estilos.
@@ -83,7 +109,7 @@ Além dessas páginas, a GS exige pelo menos duas páginas distintas para a solu
 
 ## Entrega e trabalho em grupo
 
-Ainda são necessários os links reais da aplicação na Vercel, da API Java e do vídeo, os nomes dos integrantes e um contato. Também é preciso testar mobile, tablet e desktop e entregar o ZIP sem `node_modules` no Portal do Aluno. A rubrica pede ao menos cinco commits por integrante e quinze no total, refletindo contribuições reais.
+Os links, integrantes e contato estão na seção de entrega no início deste README. O ZIP para o Portal do Aluno deve conter o código-fonte e os recursos, sem `node_modules`, `dist`, `.git` ou `.env.local`. A rubrica pede ao menos cinco commits por integrante e quinze no total, refletindo contribuições reais. Verifique a aplicação publicada em mobile, tablet e desktop antes da apresentação.
 
 Depois do commit da etapa atual, o grupo pode combinar o Gitflow: `main` para a versão estável, `develop` para integração e branches `feature/...` para cada tarefa.
 
