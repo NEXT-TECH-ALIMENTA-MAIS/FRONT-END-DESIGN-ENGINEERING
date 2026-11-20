@@ -1,6 +1,6 @@
 
 import { useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   ArrowRight,
   Eye,
@@ -17,19 +17,32 @@ import {
   painel
 } from '../../components/Interface/Interface'
 import type { Estado } from '../../data/estado'
+import { apiConfigurada } from '../../services/api'
+import { configurarPrimeiroAdmin, entrarAdmin } from '../../services/adminApi'
 
 export function Acesso({ orgs, setPerfil }: Estado) {
+  const navegar = useNavigate()
+  const [aba, setAba] = useState<'organizacao' | 'administrador'>('organizacao')
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [mostrarSenha, setMostrarSenha] = useState(false)
   const [mensagem, setMensagem] = useState('')
+  const [adminEmail, setAdminEmail] = useState('')
+  const [adminSenha, setAdminSenha] = useState('')
+  const [adminNome, setAdminNome] = useState('')
+  const [adminCpf, setAdminCpf] = useState('')
+  const [chaveConfiguracao, setChaveConfiguracao] = useState('')
+  const [configurarAdmin, setConfigurarAdmin] = useState(false)
+  const [adminMensagem, setAdminMensagem] = useState('')
+  const [adminErro, setAdminErro] = useState('')
+  const [adminOcupado, setAdminOcupado] = useState(false)
 
   const [erros, setErros] = useState({
     email: '',
     senha: ''
   })
 
-  const perfisDisponiveis = orgs.filter(org => org.ativa)
+  const perfisDisponiveis = orgs.filter(org => org.ativa && org.papel !== 'ADMIN')
 
   function entrar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault()
@@ -92,6 +105,30 @@ export function Acesso({ orgs, setPerfil }: Estado) {
     setMensagem('')
   }
 
+  async function entrarAdministrador(evento: FormEvent<HTMLFormElement>) {
+    evento.preventDefault(); setAdminErro(''); setAdminMensagem('')
+    if (!apiConfigurada) { setAdminErro('Configure VITE_API_URL para conectar o acesso administrativo à API Java.'); return }
+    setAdminOcupado(true)
+    try {
+      await entrarAdmin(adminEmail.trim(), adminSenha)
+      navegar('/admin')
+    } catch (falha) { setAdminErro(falha instanceof Error ? falha.message : 'Não foi possível entrar.') }
+    finally { setAdminOcupado(false) }
+  }
+
+  async function configurarAdministrador(evento: FormEvent<HTMLFormElement>) {
+    evento.preventDefault(); setAdminErro(''); setAdminMensagem('')
+    if (!apiConfigurada) { setAdminErro('Configure VITE_API_URL para conectar o acesso administrativo à API Java.'); return }
+    if (adminCpf.replace(/\D/g, '').length !== 11) { setAdminErro('Informe um CPF com 11 números.'); return }
+    setAdminOcupado(true)
+    try {
+      await configurarPrimeiroAdmin({ chaveConfiguracao, nome: adminNome.trim(), cpf: adminCpf.replace(/\D/g, ''), email: adminEmail.trim(), senha: adminSenha })
+      setConfigurarAdmin(false); setAdminMensagem('Conta administrativa configurada. Agora entre com o e-mail e a senha escolhidos.')
+      setChaveConfiguracao(''); setAdminCpf(''); setAdminNome(''); setAdminSenha('')
+    } catch (falha) { setAdminErro(falha instanceof Error ? falha.message : 'Não foi possível configurar a conta.') }
+    finally { setAdminOcupado(false) }
+  }
+
   return (
     <Pagina titulo="Acesse sua conta">
       <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-2">
@@ -111,7 +148,12 @@ export function Acesso({ orgs, setPerfil }: Estado) {
             </p>
           </div>
 
-          <form onSubmit={entrar} noValidate className="space-y-5">
+          <div className="mb-6 grid grid-cols-2 rounded-xl bg-slate-100 p-1" role="tablist" aria-label="Tipo de acesso">
+            <button type="button" role="tab" aria-selected={aba === 'organizacao'} onClick={() => setAba('organizacao')} className={`rounded-lg px-3 py-2.5 text-sm font-bold ${aba === 'organizacao' ? 'bg-white text-navy shadow-sm' : 'text-slate-600'}`}>Organização</button>
+            <button type="button" role="tab" aria-selected={aba === 'administrador'} onClick={() => setAba('administrador')} className={`rounded-lg px-3 py-2.5 text-sm font-bold ${aba === 'administrador' ? 'bg-white text-navy shadow-sm' : 'text-slate-600'}`}>Administrador</button>
+          </div>
+
+          {aba === 'organizacao' && <form onSubmit={entrar} noValidate className="space-y-5">
             <div>
               <label
                 htmlFor="email-login"
@@ -221,7 +263,24 @@ export function Acesso({ orgs, setPerfil }: Estado) {
             </button>
 
             <Mensagem texto={mensagem} />
-          </form>
+          </form>}
+
+          {aba === 'administrador' && <div>
+            <p className="mb-5 text-sm leading-6 text-slate-600">Conta individual de administrador, conforme as regras do Alimenta+. O CPF é vinculado a esta conta e não à organização.</p>
+            <form onSubmit={configurarAdmin ? configurarAdministrador : entrarAdministrador} className="space-y-5">
+              {configurarAdmin && <>
+                <label className="block text-sm font-bold text-navy">Nome completo<input required maxLength={120} className={campo} value={adminNome} onChange={e => setAdminNome(e.target.value)}/></label>
+                <label className="block text-sm font-bold text-navy">CPF<input required inputMode="numeric" maxLength={14} className={campo} value={adminCpf} onChange={e => setAdminCpf(e.target.value)}/></label>
+                <label className="block text-sm font-bold text-navy">Chave de configuração do servidor<input required type="password" autoComplete="off" className={campo} value={chaveConfiguracao} onChange={e => setChaveConfiguracao(e.target.value)}/><span className="mt-1 block text-xs font-normal text-slate-500">Definida pela equipe na configuração da API. Não é a senha da conta.</span></label>
+              </>}
+              <label className="block text-sm font-bold text-navy">E-mail<input required type="email" autoComplete="email" className={campo} value={adminEmail} onChange={e => setAdminEmail(e.target.value)}/></label>
+              <label className="block text-sm font-bold text-navy">Senha<input required type="password" autoComplete={configurarAdmin ? 'new-password' : 'current-password'} minLength={8} className={campo} value={adminSenha} onChange={e => setAdminSenha(e.target.value)}/></label>
+              {adminErro && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-800">{adminErro}</p>}
+              {adminMensagem && <p role="status" className="rounded-lg bg-green-50 p-3 text-sm text-green-800">{adminMensagem}</p>}
+              <button disabled={adminOcupado} type="submit" className={`${botao} w-full gap-2 py-3`}>{adminOcupado ? 'Aguarde…' : configurarAdmin ? 'Configurar primeira conta' : 'Entrar como administrador'}<ArrowRight size={17}/></button>
+            </form>
+            <button type="button" onClick={() => { setConfigurarAdmin(!configurarAdmin); setAdminErro(''); setAdminMensagem('') }} className="mt-5 text-sm font-bold text-bluebrand underline">{configurarAdmin ? 'Já tenho uma conta administrativa' : 'Configurar primeira conta administrativa'}</button>
+          </div>}
 
           <div className="mt-6 border-t border-slate-200 pt-5 text-center">
             <p className="text-sm text-slate-600">
@@ -240,7 +299,7 @@ export function Acesso({ orgs, setPerfil }: Estado) {
           </p>
         </section>
 
-        <section className={`${painel} bg-[#f8faff] shadow-sm`}>
+        {aba === 'organizacao' ? <section className={`${painel} bg-[#f8faff] shadow-sm`}>
           <div className="mb-5 flex items-center gap-3">
             <span className="rounded-xl bg-blue-100 p-3 text-bluebrand">
               <Users size={23} />
@@ -266,7 +325,7 @@ export function Acesso({ orgs, setPerfil }: Estado) {
             {perfisDisponiveis.map(org => (
               <Link
                 key={org.id}
-                to="/painel"
+                to="/demonstracao/painel"
                 onClick={() => setPerfil(org.id)}
                 className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-bluebrand hover:shadow-sm"
               >
@@ -293,7 +352,7 @@ export function Acesso({ orgs, setPerfil }: Estado) {
               </Link>
             ))}
           </div>
-        </section>
+        </section> : <aside className={`${painel} bg-[#f8faff] shadow-sm`}><h2 className="font-display text-lg font-extrabold text-navy">Acesso protegido</h2><p className="mt-3 text-sm leading-6 text-slate-600">Depois de entrar, você poderá analisar cadastros pendentes e consultar mensagens de contato. As ações administrativas serão validadas pela API.</p><p className="mt-4 rounded-xl bg-blue-50 p-4 text-xs leading-5 text-slate-600">Para configurar a primeira conta, a equipe precisa definir uma chave no ambiente do servidor. O sistema não cria administradores por cadastro público.</p></aside>}
       </div>
     </Pagina>
   )
