@@ -8,7 +8,7 @@ Projeto acadêmico da Global Solution FIAP que conecta estabelecimentos com alim
 - `src/pages`: telas da aplicação.
 - `src/components`: partes reutilizáveis, como cabeçalho e cartões.
 - `src/data`: modelos e exemplos de alimentos.
-- `src/services`: dados fictícios e preparação para acessar a API Java.
+- `src/services`: dados fictícios e funções de acesso à API Java.
 
 ## Executar
 
@@ -159,6 +159,17 @@ API encontrada no README do ZIP Java: `https://alimentamais-api.onrender.com`.
 - Solicitação de oferta: POST com os IDs reais dos itens e da instituição.
 - `/cadastro`: POST do cadastro completo, incluindo login, senha, razão social e endereço. O backend devolve cadastro pendente de aprovação; não é login.
 - Alimentos: o formulário GET/POST já existente também está disponível no painel durante o desenvolvimento local.
+- Campanhas: a página `/necessidades` tem uma aba recolhível para cadastrar campanha de uma instituição aprovada e ativa, com nome, descrição, período e metas em kg por alimento.
+
+### Cadastro de campanhas
+
+Na página **Necessidades**, abra **Cadastrar campanha**. Selecione a instituição, preencha nome, descrição, data de início e data de fim, adicione pelo menos uma meta de alimento em kg e envie o formulário. Cada alimento pode aparecer uma vez na lista de metas. A data final não pode ser anterior à inicial. Não há transferência de dinheiro.
+
+O formulário consulta `GET /api/organizacoes` e `GET /api/alimentos`. Ao enviar, cria a campanha com `POST /api/campanhas` e depois registra cada meta com `POST /api/campanhas/{campanhaId}/metas`. A API Java valida a instituição e grava os dados no Oracle. Se a campanha for criada, mas alguma meta falhar, a tela mostra o ID da campanha para permitir a conferência no banco; o cadastro não é desfeito automaticamente.
+
+Essa aba está nas duas versões da listagem de Necessidades: com API configurada e na visualização sem API. Sem `VITE_API_URL`, o formulário não consegue carregar instituições e alimentos nem salvar. A campanha pode reunir necessidades da **mesma instituição**, e as metas e o progresso são separados por alimento, conforme as regras do banco. O vínculo entre uma necessidade e a campanha ainda não é feito por esse formulário.
+
+**Limite de acesso:** o Java ainda não implementa login de instituição. Por isso, o formulário permite selecionar uma instituição aprovada; essa escolha não comprova que quem está usando o site pertence a ela. Não use o cadastro público como controle de autorização. A validação de identidade precisa ser feita no backend antes do uso em produção.
 
 As ações identificadas por uma organização (edição, solicitação, negociação e retirada) estão disponíveis somente em `npm run dev`, explicitamente como teste de integração. A versão publicada mantém consultas, mas não libera essas ações até o backend oferecer autenticação e autorização. Essa limitação no front não protege os endpoints do Java: a equipe backend precisa implementar o controle no servidor.
 

@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { ArrowUpRight, ChevronLeft, ChevronRight, MapPin, PackageCheck, Search } from 'lucide-react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { MainLayout } from '../../layouts/MainLayout/MainLayout'
+import { CampanhasApi } from '../../components/CampanhasApi/CampanhasApi'
 import { botao, campo, Etiqueta, painel } from '../../components/Interface/Interface'
 import { kg } from '../../data/calculos'
 import { listarNecessidadesApi, listarOfertasApi, listarOrganizacoes, solicitarOfertaApi, type NecessidadeApi, type OfertaApi, type OrganizacaoApi } from '../../services/painelApi'
@@ -70,6 +71,17 @@ export function PublicacoesApi({ tipo }: { tipo: 'ofertas' | 'necessidades' }) {
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">{itensDaPagina.map(item => <article key={item.id} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white transition duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-950/8"><div className="flex h-43 items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 px-5 text-center"><span className="font-display text-2xl font-extrabold text-bluebrand">{item.itens[0]?.alimento ?? (tipo === 'ofertas' ? 'Oferta' : 'Necessidade')}</span></div><div className="p-4 sm:p-5"><Etiqueta status={item.status}/><h3 className="mt-3 min-h-13 font-display text-base font-extrabold leading-snug text-navy">{item.titulo}</h3><p className="mt-1 text-sm text-slate-500">{dono(item)?.nomeFantasia ?? 'Organização'}</p><div className="my-4 h-px bg-slate-100"/><p className="flex items-center gap-2 text-xs text-slate-500"><MapPin size={15} className="shrink-0 text-bluebrand"/>{dono(item)?.endereco ?? 'Local não informado'}</p><p className="mt-2 flex items-start gap-2 text-xs text-slate-500"><PackageCheck size={15} className="mt-0.5 shrink-0 text-bluebrand"/><span>{item.itens.map(alimento => `${alimento.alimento}: ${kg('disponivelKg' in alimento ? alimento.disponivelKg : alimento.quantidadeKg)}`).join(' · ')}</span></p><Link to={`/${tipo}/${item.id}`} className="mt-5 inline-flex items-center gap-1 text-sm font-bold text-bluebrand hover:underline">Ver detalhes <ArrowUpRight size={17} aria-hidden="true"/></Link></div></article>)}</div>
       {!filtradas.length && !erro && <div className={`${painel} mt-5 text-center`}><p className="font-bold text-navy">Nenhuma publicação encontrada</p><p className="mt-1 text-sm text-slate-500">A API ainda não retornou publicações para este filtro.</p></div>}
       {totalPaginas > 1 && <nav className="mt-6 flex items-center justify-center gap-4" aria-label="Paginação das publicações"><button type="button" onClick={() => setPagina(Math.max(0, paginaAtual - 1))} disabled={paginaAtual === 0} aria-label="Página anterior" className="rounded-full border border-slate-200 bg-white p-2.5 text-navy disabled:opacity-40"><ChevronLeft size={20}/></button><span className="text-sm font-semibold text-slate-600">Página {paginaAtual + 1} de {totalPaginas}</span><button type="button" onClick={() => setPagina(Math.min(totalPaginas - 1, paginaAtual + 1))} disabled={paginaAtual === totalPaginas - 1} aria-label="Próxima página" className="rounded-full border border-slate-200 bg-white p-2.5 text-navy disabled:opacity-40"><ChevronRight size={20}/></button></nav>}
+      {tipo === 'necessidades' && (
+        <details className="mt-10 rounded-2xl border border-slate-200 bg-white p-5">
+          <summary className="cursor-pointer font-display text-lg font-bold text-navy">
+            Cadastrar campanha
+          </summary>
+          <p className="mt-3 text-sm text-slate-600">
+            Defina o período e as metas de alimentos da campanha da instituição.
+          </p>
+          <CampanhasApi />
+        </details>
+      )}
     </>}
   </main></MainLayout>
 }
