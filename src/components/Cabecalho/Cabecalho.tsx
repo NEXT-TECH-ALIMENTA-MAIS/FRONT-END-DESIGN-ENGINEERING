@@ -11,7 +11,7 @@ const paginas = [
 
 const institucionais = [
   { nome: 'Sobre', caminho: '/Sobre' },
-  { nome: 'Integrantes', caminho: '/#' },
+  { nome: 'Integrantes', caminho: '/Integrantes' },
   { nome: 'FAQ', caminho: '/faq' },
   { nome: 'Contato', caminho: '/Contato' },
 ]
