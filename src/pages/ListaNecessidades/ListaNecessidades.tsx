@@ -7,6 +7,7 @@ import { Pagina, campo, painel } from '../../components/Interface/Interface'
 import { kg, rotulo } from '../../data/calculos'
 import { necessidades as necessidadesIlustrativas } from '../../data/necessidades'
 import type { Estado } from '../../data/estado'
+import { ListaNecessidadesReais } from './ListaNecessidadesReais'
 
 const categorias = [
   'Todos',
@@ -52,7 +53,7 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
     })
   }, [busca, categoria])
 
-  // Paginação
+  // Paginação dos cards ilustrativos
   const quantidadePaginas = Math.ceil(
     resultados.length / ITENS_POR_PAGINA
   )
@@ -104,13 +105,9 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
               Explore as campanhas e necessidades das instituições.
             </p>
           </div>
-
-          <span className="w-fit rounded-full bg-blue-100 px-3 py-1.5 text-xs font-bold text-bluebrand">
-            Dados fictícios
-          </span>
         </div>
 
-        {/* Campo de busca */}
+        {/* Campo de busca compartilhado */}
         <label className="relative mt-5 block max-w-xl">
           <Search
             size={18}
@@ -127,9 +124,9 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
           />
         </label>
 
-        {/* Filtros por categoria */}
+        {/* Filtros dos cards ilustrativos */}
         <p className="mt-5 text-xs text-slate-500">
-          Filtrar as necessidades por categoria:
+          Filtrar as necessidades ilustrativas por categoria:
         </p>
 
         <div
@@ -151,6 +148,43 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
               {nome}
             </button>
           ))}
+        </div>
+
+      </section>
+
+      {/* ===================================== */}
+      {/* NECESSIDADES REAIS - API JAVA         */}
+      {/* ===================================== */}
+
+      <ListaNecessidadesReais busca={busca} />
+
+      {/* ===================================== */}
+      {/* NECESSIDADES ILUSTRATIVAS             */}
+      {/* ===================================== */}
+
+      <section
+        className="mt-12 border-t border-slate-200 pt-8"
+        aria-labelledby="titulo-ilustrativas"
+      >
+
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2
+              id="titulo-ilustrativas"
+              className="font-display text-xl font-extrabold text-navy"
+            >
+              Necessidades ilustrativas
+            </h2>
+
+            <p className="mt-1 text-sm text-slate-500">
+              Exemplos visuais de campanhas e necessidades
+              das instituições.
+            </p>
+          </div>
+
+          <span className="w-fit rounded-full bg-blue-100 px-3 py-1.5 text-xs font-bold text-bluebrand">
+            Dados fictícios
+          </span>
         </div>
 
         {/* Cards ilustrativos */}
@@ -175,11 +209,11 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
           </div>
         )}
 
-        {/* Paginação */}
+        {/* Paginação dos cards ilustrativos */}
         {quantidadePaginas > 1 && (
           <nav
             className="mt-6 flex items-center justify-center gap-4"
-            aria-label="Paginação das necessidades"
+            aria-label="Paginação das necessidades ilustrativas"
           >
             <button
               type="button"
@@ -220,7 +254,10 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
 
       </section>
 
-      {/* Necessidades cadastradas na demonstração */}
+      {/* ===================================== */}
+      {/* NECESSIDADES DA DEMONSTRAÇÃO          */}
+      {/* ===================================== */}
+
       {necessidadesDaDemonstracao.length > 0 && (
         <section className="mt-12 border-t border-slate-200 pt-8">
 
