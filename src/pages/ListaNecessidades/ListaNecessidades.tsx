@@ -1,4 +1,3 @@
-
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -31,7 +30,6 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
     setParametros(valor ? { busca: valor } : {})
   }
 
-  // Filtra as necessidades ilustrativas
   const resultados = useMemo(() => {
     return necessidadesIlustrativas.filter(necessidade => {
       const combinaCategoria =
@@ -53,7 +51,6 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
     })
   }, [busca, categoria])
 
-  // Paginação dos cards ilustrativos
   const quantidadePaginas = Math.ceil(
     resultados.length / ITENS_POR_PAGINA
   )
@@ -68,7 +65,6 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
     (paginaAtual + 1) * ITENS_POR_PAGINA
   )
 
-  // Necessidades cadastradas na demonstração
   const necessidadesDaDemonstracao = necessidades.filter(n =>
     orgs.some(o =>
       o.id === n.instituicao && o.ativa
@@ -107,7 +103,6 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
           </div>
         </div>
 
-        {/* Campo de busca compartilhado */}
         <label className="relative mt-5 block max-w-xl">
           <Search
             size={18}
@@ -124,7 +119,6 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
           />
         </label>
 
-        {/* Filtros dos cards ilustrativos */}
         <p className="mt-5 text-xs text-slate-500">
           Filtrar as necessidades ilustrativas por categoria:
         </p>
@@ -152,15 +146,9 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
 
       </section>
 
-      {/* ===================================== */}
-      {/* NECESSIDADES REAIS - API JAVA         */}
-      {/* ===================================== */}
 
       <ListaNecessidadesReais busca={busca} />
 
-      {/* ===================================== */}
-      {/* NECESSIDADES ILUSTRATIVAS             */}
-      {/* ===================================== */}
 
       <section
         className="mt-12 border-t border-slate-200 pt-8"
@@ -187,7 +175,6 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
           </span>
         </div>
 
-        {/* Cards ilustrativos */}
         {itensDaPagina.length ? (
           <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {itensDaPagina.map(necessidade => (
@@ -209,7 +196,6 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
           </div>
         )}
 
-        {/* Paginação dos cards ilustrativos */}
         {quantidadePaginas > 1 && (
           <nav
             className="mt-6 flex items-center justify-center gap-4"
@@ -254,9 +240,6 @@ export function ListaNecessidades({ necessidades, orgs }: Estado) {
 
       </section>
 
-      {/* ===================================== */}
-      {/* NECESSIDADES DA DEMONSTRAÇÃO          */}
-      {/* ===================================== */}
 
       {necessidadesDaDemonstracao.length > 0 && (
         <section className="mt-12 border-t border-slate-200 pt-8">

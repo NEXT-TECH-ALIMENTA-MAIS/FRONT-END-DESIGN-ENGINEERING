@@ -1,0 +1,74 @@
+[
+    {
+        "id": 101,
+        "titulo": "Doação de alimentos para famílias",
+        "descricao": "Arrecadação de alimentos para famílias em situação de vulnerabilidade.",
+        "instituicao": 1,
+        "campanha": "Campanha Solidária",
+        "status": "ativa",
+        "itens": [
+            {
+                "nome": "Arroz",
+                "quantidade": 50
+            },
+            {
+                "nome": "Feijão",
+                "quantidade": 30
+            }
+        ]
+    },
+    {
+        "id": 102,
+        "titulo": "Alimentação infantil",
+        "descricao": "Arrecadação de alimentos destinados a crianças.",
+        "instituicao": 2,
+        "campanha": "Infância Solidária",
+        "status": "ativa",
+        "itens": [
+            {
+                "nome": "Leite em pó",
+                "quantidade": 20
+            },
+            {
+                "nome": "Aveia",
+                "quantidade": 15
+            }
+        ]
+    },
+    {
+        "id": 103,
+        "titulo": "Cestas básicas comunitárias",
+        "descricao": "Distribuição de alimentos para comunidades carentes.",
+        "instituicao": 3,
+        "campanha": "Alimenta Comunidade",
+        "status": "ativa",
+        "itens": [
+            {
+                "nome": "Macarrão",
+                "quantidade": 40
+            },
+            {
+                "nome": "Óleo",
+                "quantidade": 10
+            }
+        ]
+    },
+    {
+        "id": 104,
+        "titulo": "Almoço dos Crias",
+        "descricao": "Distribuição de marmitas.",
+        "instituicao": 3,
+        "campanha": "Alimenta Comunidade",
+        "status": "ativa",
+        "itens": [
+            {
+                "nome": "Macarrão",
+                "quantidade": 40
+            },
+            {
+                "nome": "Óleo",
+                "quantidade": 10
+            }
+        ]
+    }
+]
