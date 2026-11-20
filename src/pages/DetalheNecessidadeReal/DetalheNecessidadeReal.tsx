@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
@@ -10,8 +9,12 @@ import {
   RefreshCw
 } from 'lucide-react'
 
+import {
+  buscarNecessidadeRealPorId,
+  buscarNomeInstituicao
+} from '../../services/necessidadesApi'
+
 import { Pagina, painel } from '../../components/Interface/Interface'
-import { buscarNecessidadeRealPorId } from '../../services/necessidadesApi'
 import type { Necessidade } from '../../data/modelos'
 import { kg } from '../../data/calculos'
 
@@ -24,48 +27,78 @@ export function DetalheNecessidadeReal() {
   const [necessidade, setNecessidade] =
     useState<Necessidade | null>(null)
 
-  const [carregando, setCarregando] = useState(apiHabilitada)
-  const [erro, setErro] = useState<string | null>(null)
+  const [nomeInstituicao, setNomeInstituicao] =
+    useState<string>('Carregando instituição...')
+
+  const [carregando, setCarregando] =
+    useState(apiHabilitada)
+
+  const [erro, setErro] =
+    useState<string | null>(null)
 
   const idNumerico = Number(id)
 
-
   useEffect(() => {
-    if (!apiHabilitada || !id || !Number.isSafeInteger(idNumerico) ||
-        idNumerico <= 0) {
-      return
-    }
+  if (
+    !apiHabilitada ||
+    !id ||
+    !Number.isSafeInteger(idNumerico) ||
+    idNumerico <= 0
+  ) {
+    return
+  }
 
-    let ativo = true
+  let ativo = true
 
-    async function carregarDetalhes() {
-      try {
-        const dados = await buscarNecessidadeRealPorId(idNumerico)
+  async function carregarDetalhes() {
+    try {
+      // Busca os dados da necessidade
+      const dados = await buscarNecessidadeRealPorId(idNumerico)
 
-        if (ativo) {
-          setNecessidade(dados)
-        }
-      } catch (error) {
-        if (ativo) {
-          setErro(
-            error instanceof Error
-              ? error.message
-              : 'Não foi possível carregar a necessidade.'
+      if (!ativo) return
+
+      // Atualiza os dados da necessidade
+      setNecessidade(dados)
+
+      // Busca o nome da instituição responsável
+      if (dados) {
+        try {
+          const nome = await buscarNomeInstituicao(
+            dados.instituicao
           )
-        }
-      } finally {
-        if (ativo) {
-          setCarregando(false)
+
+          if (ativo) {
+            setNomeInstituicao(nome)
+          }
+        } catch {
+          if (ativo) {
+            setNomeInstituicao(
+              'Instituição não identificada'
+            )
+          }
         }
       }
+    } catch (error) {
+      if (ativo) {
+        setErro(
+          error instanceof Error
+            ? error.message
+            : 'Não foi possível carregar a necessidade.'
+        )
+      }
+    } finally {
+      if (ativo) {
+        setCarregando(false)
+      }
     }
+  }
 
-    void carregarDetalhes()
+  void carregarDetalhes()
 
-    return () => {
-      ativo = false
-    }
-  }, [id, idNumerico])
+  return () => {
+    ativo = false
+  }
+}, [id, idNumerico])
 
 
   if (!apiHabilitada) {
@@ -294,7 +327,7 @@ export function DetalheNecessidadeReal() {
               </h3>
 
               <p className="mt-1 text-sm text-slate-600">
-                Código da instituição: {necessidade.instituicao}
+                {nomeInstituicao}
               </p>
             </div>
           </div>

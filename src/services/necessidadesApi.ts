@@ -27,11 +27,34 @@ export async function buscarNecessidadeRealPorId(
     return necessidades.find(n => n.id === id) ?? null
   }
 
-  try {
-    return await consultarApi<Necessidade>(
-      `/necessidades/${id}`
-    )
-  } catch (error) {
-    throw error
+  return consultarApi<Necessidade>(
+    `/necessidades/${id}`
+  )
+}
+
+type Instituicao = {
+  id: number
+  nome: string
+}
+
+export async function buscarNomeInstituicao(
+  id: number
+): Promise<string> {
+  if (usarMock) {
+    const instituicoes: Instituicao[] = [
+      { id: 1, nome: 'Nossa Comunidade' },
+      { id: 2, nome: 'Criando Falcões' },
+      { id: 3, nome: 'Comunidade Solidariedade' },
+      { id: 4, nome: 'Ong da Comunidade' }
+    ]
+
+    return instituicoes.find(i => i.id === id)?.nome
+      ?? 'Instituição não identificada'
   }
+
+  const instituicao = await consultarApi<Instituicao>(
+    `/instituicoes/${id}`
+  )
+
+  return instituicao.nome
 }
