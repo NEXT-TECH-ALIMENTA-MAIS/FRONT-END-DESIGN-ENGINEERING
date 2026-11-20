@@ -19,7 +19,8 @@ export async function requisicao<T>(
   }
 
   if (!resposta.ok) {
-    throw new Error(`A API retornou um erro (${resposta.status}).`)
+    const erro = await resposta.json().catch(() => null)
+    throw new Error(typeof erro?.mensagem === 'string' ? erro.mensagem : `A API retornou um erro (${resposta.status}).`)
   }
 
   // O servidor pode confirmar uma operação sem devolver conteúdo (HTTP 204).
