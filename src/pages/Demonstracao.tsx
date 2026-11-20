@@ -17,6 +17,7 @@ import { Painel } from './Painel/Painel'
 import { Retiradas } from './Retiradas/Retiradas'
 import { Sobre } from './Sobre/Sobre'
 import { Contato } from './Contato/Contato'
+import { Integrantes } from './Integrantes/Integrantes'
 
 export function Demonstracao() {
   const [orgs, setOrgs] = useState(organizacoesIniciais)
@@ -24,8 +25,16 @@ export function Demonstracao() {
   const [pedidos, setPedidos] = useState(pedidosIniciais)
   const [necessidades, setNecessidades] = useState(necessidadesIniciais)
   const [perfil, setPerfil] = useState(0)
+
   const atual = orgs.find(o => o.id === perfil && o.ativa)
-  const estado = { orgs, setOrgs, ofertas, setOfertas, pedidos, setPedidos, necessidades, setNecessidades, atual, setPerfil }
+
+  const estado = {
+    orgs, setOrgs,
+    ofertas, setOfertas,
+    pedidos, setPedidos,
+    necessidades, setNecessidades,
+    atual, setPerfil
+  }
 
   return (
     <PerfilContext.Provider value={atual}>
@@ -34,6 +43,7 @@ export function Demonstracao() {
         <Route path="/faq" element={<Faq />} />
         <Route path="/contato" element={<Contato />} />
         <Route path="/sobre" element={<Sobre />} />
+        <Route path="/integrantes" element={<Integrantes />} />
         <Route path="/acesso" element={<Acesso {...estado} />} />
         <Route path="/cadastro" element={<Cadastro {...estado} />} />
         <Route path="/ofertas" element={<ListaOfertas {...estado} />} />
@@ -44,10 +54,15 @@ export function Demonstracao() {
         <Route path="/painel/:tipo" element={<PainelCliente />} />
         <Route path="/painel" element={<Painel {...estado} />} />
         <Route path="/retiradas/:id" element={<Retiradas {...estado} />} />
-        <Route path="*" element={<Pagina titulo="Página não encontrada"><Link to="/">Voltar ao início</Link></Pagina>} />
+        <Route
+          path="*"
+          element={
+            <Pagina titulo="Página não encontrada">
+              <Link to="/">Voltar ao início</Link>
+            </Pagina>
+          }
+        />
       </Routes>
     </PerfilContext.Provider>
   )
-
 }
-
